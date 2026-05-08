@@ -359,7 +359,7 @@ async function loadSlots() {
     if (!selectedDate) return;
 
     try {
-        const res = await fetch(`http://localhost:3000/slots/${selectedDate}`);
+        const res = await fetch(`https://interviewprep-backend-3ve4.onrender.com/`);
         const slots = await res.json();
 
         [...timeSelect.options].forEach(option => {
@@ -419,7 +419,7 @@ Are you sure you want to book this appointment?
     }
 
     try {
-        const res = await fetch("http://localhost:3000/book", {
+        const res = await fetch("https://interviewprep-backend-3ve4.onrender.com/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
