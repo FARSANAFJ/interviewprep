@@ -1,17 +1,20 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
 const FILE = "bookings.json";
 
-/* CHANGE THESE */
-const OWNER_EMAIL = "farsanafarooq@gmail.com";
-const GMAIL_APP_PASSWORD = "zurqsfrspnkewrey";
+/* Render Environment Variables */
+const OWNER_EMAIL = process.env.OWNER_EMAIL;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+const resend = new Resend(RESEND_API_KEY);
 
 function readBookings() {
     if (!fs.existsSync(FILE)) return [];
@@ -27,19 +30,11 @@ function saveBookings(bookings) {
     fs.writeFileSync(FILE, JSON.stringify(bookings, null, 2));
 }
 
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: OWNER_EMAIL,
-        pass: GMAIL_APP_PASSWORD
-    }
-});
-
 app.get("/", (req, res) => {
     res.send("InterviewPrep server is running");
 });
 
-/* CHECK AVAILABLE SLOTS */
+/* Check available slots */
 app.get("/slots/:date", (req, res) => {
     const date = req.params.date;
     const bookings = readBookings();
@@ -54,7 +49,7 @@ app.get("/slots/:date", (req, res) => {
     });
 });
 
-/* BOOK APPOINTMENT */
+/* Book appointment */
 app.post("/book", async (req, res) => {
     try {
         const { name, email, date, time, type, msg } = req.body;
@@ -83,14 +78,6 @@ app.post("/book", async (req, res) => {
             });
         }
 
-        const countForDate = bookings.filter(b => b.date === date).length;
-
-        if (countForDate >= 2) {
-            return res.status(400).json({
-                message: "This date is already fully booked"
-            });
-        }
-
         const booking = {
             id: Date.now(),
             name,
@@ -108,40 +95,42 @@ app.post("/book", async (req, res) => {
         let emailSent = true;
 
         try {
-            await transporter.sendMail({
-                from: OWNER_EMAIL,
+            /* Email to owner */
+            await resend.emails.send({
+                from: "InterviewPrep <onboarding@resend.dev>",
                 to: OWNER_EMAIL,
                 subject: "New Interview Booking",
-                text: `
-New interview booking received.
-
-Name: ${booking.name}
-Email: ${booking.email}
-Date: ${booking.date}
-Time: ${booking.time}
-Type: ${booking.type}
-Message: ${booking.msg}
-Submitted At: ${booking.submittedAt}
+                html: `
+                    <h2>New Interview Booking</h2>
+                    <p><b>Name:</b> ${booking.name}</p>
+                    <p><b>Email:</b> ${booking.email}</p>
+                    <p><b>Date:</b> ${booking.date}</p>
+                    <p><b>Time:</b> ${booking.time}</p>
+                    <p><b>Type:</b> ${booking.type}</p>
+                    <p><b>Message:</b> ${booking.msg || "Not provided"}</p>
+                    <p><b>Submitted At:</b> ${booking.submittedAt}</p>
                 `
             });
 
-            await transporter.sendMail({
-                from: OWNER_EMAIL,
-                to: booking.email,
+            /* Email to client */
+            await resend.emails.send({
+                from: "InterviewPrep <onboarding@resend.dev>",
+                to: email,
                 subject: "Your Interview Booking is Confirmed",
-                text: `
-Dear ${booking.name},
+                html: `
+                    <h2>Booking Confirmed</h2>
 
-Your mock interview booking has been confirmed.
+                    <p>Dear ${booking.name},</p>
 
-Date: ${booking.date}
-Time: ${booking.time}
-Interview Type: ${booking.type}
+                    <p>Your mock interview booking has been confirmed.</p>
 
-Please check your email regularly for further updates.
+                    <p><b>Date:</b> ${booking.date}</p>
+                    <p><b>Time:</b> ${booking.time}</p>
+                    <p><b>Interview Type:</b> ${booking.type}</p>
 
-Thank you,
-InterviewPrep
+                    <p>Please check your email regularly for further updates.</p>
+
+                    <p>Thank you,<br>InterviewPrep</p>
                 `
             });
 
@@ -160,6 +149,7 @@ InterviewPrep
 
     } catch (error) {
         console.log(error);
+
         res.status(500).json({
             message: "Server error"
         });
