@@ -11,7 +11,7 @@ const FILE = "bookings.json";
 
 /* CHANGE THESE */
 const OWNER_EMAIL = "farsanafarooq@gmail.com";
-const GMAIL_APP_PASSWORD = "zurq sfrs pnke wrey";
+const GMAIL_APP_PASSWORD = "zurqsfrspnkewrey";
 
 function readBookings() {
     if (!fs.existsSync(FILE)) return [];
