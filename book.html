@@ -211,25 +211,95 @@ button:hover {
 /* MOBILE */
 @media(max-width: 900px) {
 
-    nav {
-        padding: 0 20px;
+    nav{
+        height: auto;
+        padding: 16px 18px;
+        flex-direction: column;
+        gap: 12px;
     }
 
-    .book-hero {
+    nav b{
+        font-size: 24px;
+    }
+
+    nav div{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    nav a{
+        margin-left: 0;
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .book-hero{
         grid-template-columns: 1fr;
-        padding: 45px 22px;
+        padding: 40px 18px;
+        gap: 30px;
+        min-height: auto;
     }
 
-    .hero-text h1 {
-        font-size: 42px;
+    .hero-text{
+        text-align: center;
     }
 
-    .hero-text p {
-        font-size: 16px;
+    .hero-text h1{
+        font-size: 38px;
+        line-height: 1.15;
     }
 
-    .steps {
+    .hero-text p{
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .hero-points{
+        margin-top: 24px;
+    }
+
+    .hero-points div{
+        font-size: 14px;
+    }
+
+    .form-box{
+        width: 100%;
+        padding: 26px;
+    }
+
+    .form-box h2{
+        font-size: 24px;
+    }
+
+    input,
+    select,
+    textarea{
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    button{
+        padding: 13px;
+        font-size: 15px;
+    }
+
+    .info-section{
+        padding: 60px 20px;
+    }
+
+    .info-section h2{
+        font-size: 28px;
+    }
+
+    .steps{
         grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .step-card{
+        padding: 24px;
     }
 }
 </style>

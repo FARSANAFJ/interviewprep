@@ -403,47 +403,97 @@ footer p {
 
 /* MOBILE */
 @media(max-width: 900px) {
-    nav {
-        padding: 0 25px;
+
+    nav{
+        height: auto;
+        padding: 16px 18px;
+        flex-direction: column;
+        gap: 12px;
     }
 
-    nav a {
-        display: none;
+    nav b{
+        font-size: 24px;
     }
 
-    .hero h1 {
-        font-size: 44px;
+    nav div{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
     }
 
-    .hero p {
-        font-size: 17px;
+    nav a{
+        display: block;
+        margin-left: 0;
+        font-size: 14px;
+        padding: 7px 12px;
+    }
+
+    .hero{
+        padding: 25px 18px;
+        min-height: auto;
+    }
+
+    .hero h1{
+        font-size: 42px;
+        line-height: 1.15;
+    }
+
+    .hero p{
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+    .hero button{
+        width: 100%;
+        max-width: 280px;
     }
 
     .benefit-layout,
     .stats-grid,
-    .testimonial-grid {
+    .testimonial-grid{
         grid-template-columns: 1fr;
     }
 
-    .graffiti1 {
-        font-size: 90px;
+    .benefit-card,
+    .testimonial-card,
+    .stat-card{
+        padding: 26px;
     }
 
-    .graffiti2 {
+    .graffiti1{
         font-size: 80px;
+        left: -10px;
     }
 
-    .graffiti3 {
-        font-size: 120px;
+    .graffiti2{
+        font-size: 70px;
+        right: -5px;
+    }
+
+    .graffiti3{
+        font-size: 100px;
     }
 
     .tilt,
-    .tilt2 {
+    .tilt2{
         transform: none;
     }
 
-    .section-title {
-        font-size: 34px;
+    .section-title{
+        font-size: 32px;
+        margin-bottom: 45px;
+    }
+
+    #benefits,
+    .stats,
+    .testimonials,
+    .faq{
+        padding: 75px 20px;
+    }
+
+    footer{
+        padding: 38px 20px;
     }
 }
 </style>
