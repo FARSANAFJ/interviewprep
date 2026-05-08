@@ -342,7 +342,7 @@ button:hover {
 
 </section>
 
-<<script>
+<script>
 const form = document.getElementById("form");
 const success = document.getElementById("success");
 const error = document.getElementById("error");
@@ -354,21 +354,30 @@ dateInput.min = today;
 dateInput.value = today;
 
 async function loadSlots() {
+
     const selectedDate = dateInput.value;
 
     if (!selectedDate) return;
 
     try {
-        const res = await fetch(`https://interviewprep-backend-3ve4.onrender.com/`);
+
+        const res = await fetch(
+            `https://interviewprep-backend-3ve4.onrender.com/slots/${selectedDate}`
+        );
+
         const slots = await res.json();
 
         [...timeSelect.options].forEach(option => {
+
             if (!option.value) return;
 
             if (slots[option.value] === "booked") {
+
                 option.disabled = true;
                 option.textContent = option.value + " - Booked";
+
             } else {
+
                 option.disabled = false;
                 option.textContent = option.value + " - Available";
             }
@@ -377,20 +386,24 @@ async function loadSlots() {
         timeSelect.value = "";
 
     } catch {
+
         console.log("Could not load slots");
     }
 }
 
 dateInput.addEventListener("change", loadSlots);
+
 loadSlots();
 
-form.addEventListener("submit", async function(e) {
+form.addEventListener("submit", async function(e){
+
     e.preventDefault();
 
     success.style.display = "none";
     error.style.display = "none";
 
     const data = {
+
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
         date: document.getElementById("date").value,
@@ -399,7 +412,7 @@ form.addEventListener("submit", async function(e) {
         msg: document.getElementById("msg").value
     };
 
-    const review = `
+    const confirmed = confirm(`
 Please confirm your booking:
 
 Name: ${data.name}
@@ -407,48 +420,54 @@ Email: ${data.email}
 Date: ${data.date}
 Time: ${data.time}
 Type: ${data.type}
-Message: ${data.msg || "Not provided"}
 
-Are you sure you want to book this appointment?
-    `;
+Are you sure?
+    `);
 
-    const confirmed = confirm(review);
-
-    if (!confirmed) {
-        return;
-    }
+    if (!confirmed) return;
 
     try {
-        const res = await fetch("https://interviewprep-backend-3ve4.onrender.com/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+
+        const res = await fetch(
+            "https://interviewprep-backend-3ve4.onrender.com/book",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+        );
 
         const result = await res.json();
 
         if (res.ok) {
+
             success.innerText = result.message;
             success.style.display = "block";
 
             alert(result.message);
 
             form.reset();
+
             dateInput.value = today;
+
             await loadSlots();
 
         } else {
+
             error.innerText = result.message;
             error.style.display = "block";
+
             alert(result.message);
         }
 
     } catch {
-        error.innerText = "Server is not running. Run: node server.js";
+
+        error.innerText = "Could not connect to server";
         error.style.display = "block";
-        alert("Server is not running. Run: node server.js");
+
+        alert("Could not connect to server");
     }
 });
 </script>
