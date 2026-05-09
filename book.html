@@ -217,35 +217,41 @@ button:hover {
 }
 
 @media(max-width: 900px) {
+
     nav{
-        height: auto;
-        padding: 16px 18px;
-        flex-direction: column;
-        gap: 12px;
+        height: 75px;
+        padding: 0 18px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 
     nav b{
-        font-size: 24px;
+        font-size: 22px;
     }
 
     nav div{
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
+        align-items: center;
     }
 
     nav a{
+        display: none;
+    }
+
+    nav a:last-child{
+        display: block;
         margin-left: 0;
+        padding: 8px 14px;
         font-size: 14px;
-        padding: 8px 12px;
     }
 
     .book-hero{
         grid-template-columns: 1fr;
-        padding: 40px 18px;
-        gap: 30px;
+        padding: 35px 18px;
+        gap: 28px;
         min-height: auto;
+        margin-top: 75px;
     }
 
     .hero-text{
@@ -253,7 +259,7 @@ button:hover {
     }
 
     .hero-text h1{
-        font-size: 38px;
+        font-size: 34px;
         line-height: 1.15;
     }
 
@@ -263,7 +269,7 @@ button:hover {
     }
 
     .hero-points{
-        margin-top: 24px;
+        margin-top: 22px;
     }
 
     .hero-points div{
@@ -272,7 +278,7 @@ button:hover {
 
     .form-box{
         width: 100%;
-        padding: 26px;
+        padding: 24px;
     }
 
     .form-box h2{
@@ -348,10 +354,6 @@ button:hover {
 
         <h2>Appointment Details</h2>
 
-        <div class="price-box">
-            Booking Fee: <strong>₹199</strong>
-        </div>
-
         <input type="text" id="name" placeholder="Your Name" required>
 
         <input type="email" id="email" placeholder="Email Address" required>
@@ -382,6 +384,9 @@ button:hover {
             id="msg"
             placeholder="Tell us what you want to improve"
         ></textarea>
+        <div class="price-box">
+            Booking Fee: <strong>₹199</strong>
+        </div>
 
         <button type="submit">
             Pay & Book Appointment
@@ -558,6 +563,11 @@ Are you sure?
             },
 
             handler: async function(paymentResponse) {
+
+                alert("Payment successful. Now confirming booking...");
+
+                console.log("Razorpay response:", paymentResponse);
+
                 const paidBookingData = {
                     ...data,
                     razorpay_order_id: paymentResponse.razorpay_order_id,
@@ -574,7 +584,6 @@ Are you sure?
                 }
             }
         };
-
         const rzp = new Razorpay(options);
         rzp.open();
 

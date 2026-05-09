@@ -145,6 +145,8 @@ app.post("/create-order", async (req, res) => {
             }
         });
 
+        console.log("Razorpay order created:", order.id);
+
         res.json({
             freeBooking: false,
             order
@@ -159,6 +161,7 @@ app.post("/create-order", async (req, res) => {
 });
 
 async function sendBookingEmails(booking) {
+    console.log("Sending owner email...");
     await resend.emails.send({
         from: "InterviewPrep <support@nextinterview.online>",
         to: OWNER_EMAIL,
@@ -177,6 +180,7 @@ async function sendBookingEmails(booking) {
         `
     });
 
+    console.log("Sending client email...");
     await resend.emails.send({
         from: "InterviewPrep <support@nextinterview.online>",
         to: booking.email,
@@ -192,10 +196,14 @@ async function sendBookingEmails(booking) {
             <p>Thank you,<br>InterviewPrep</p>
         `
     });
+
+    console.log("Emails sent successfully");
 }
 
 app.post("/book", async (req, res) => {
     try {
+        console.log("Book API called");
+
         const {
             name,
             email,
@@ -244,7 +252,13 @@ app.post("/book", async (req, res) => {
         let paymentId = razorpay_payment_id || "";
 
         if (!isFreeBooking) {
+            console.log("Paid booking detected");
+            console.log("Order ID:", razorpay_order_id);
+            console.log("Payment ID:", razorpay_payment_id);
+
             if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+                console.log("Payment verification details missing");
+
                 return res.status(400).json({
                     message: "Payment verification details missing"
                 });
@@ -255,14 +269,22 @@ app.post("/book", async (req, res) => {
                 .update(razorpay_order_id + "|" + razorpay_payment_id)
                 .digest("hex");
 
+            console.log("Generated signature:", generatedSignature);
+            console.log("Received signature :", razorpay_signature);
+
             if (generatedSignature !== razorpay_signature) {
+                console.log("SIGNATURE FAILED");
+
                 return res.status(400).json({
                     message: "Payment verification failed"
                 });
             }
+
+            console.log("Payment signature verified");
         } else {
             paymentStatus = "FREE_PROMO";
             paymentId = "PROMO-" + promoCode;
+            console.log("Free promo booking detected");
         }
 
         const booking = {
@@ -281,16 +303,19 @@ app.post("/book", async (req, res) => {
             createdAt: new Date()
         };
 
+        console.log("BOOKING VERIFIED, SAVING...");
         await bookingsCollection.insertOne(booking);
+        console.log("Booking saved to MongoDB");
 
         let emailSent = true;
 
         try {
+            console.log("Trying to send emails for:", booking.email);
             await sendBookingEmails(booking);
         } catch (emailError) {
             emailSent = false;
             console.log("Booking saved, but email failed:");
-            console.log(emailError.message);
+            console.log(emailError);
         }
 
         res.json({

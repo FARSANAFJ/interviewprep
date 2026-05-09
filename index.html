@@ -405,95 +405,78 @@ footer p {
 @media(max-width: 900px) {
 
     nav{
-        height: auto;
-        padding: 16px 18px;
-        flex-direction: column;
-        gap: 12px;
+        height: 75px;
+        padding: 0 18px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 
     nav b{
-        font-size: 24px;
+        font-size: 22px;
     }
 
     nav div{
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+        align-items: center;
     }
 
     nav a{
+        display: none;
+    }
+
+    nav a:last-child{
         display: block;
         margin-left: 0;
+        padding: 8px 14px;
         font-size: 14px;
-        padding: 7px 12px;
     }
 
-    .hero{
-        padding: 25px 18px;
+    .hero,
+    .book-hero{
+        margin-top: 75px;
         min-height: auto;
+        padding: 40px 18px;
     }
 
-    .hero h1{
-        font-size: 42px;
+    .hero h1,
+    .hero-text h1{
+        font-size: 36px;
         line-height: 1.15;
     }
 
-    .hero p{
-        font-size: 16px;
+    .hero p,
+    .hero-text p{
+        font-size: 15px;
         line-height: 1.7;
-    }
-
-    .hero button{
-        width: 100%;
-        max-width: 280px;
     }
 
     .benefit-layout,
     .stats-grid,
-    .testimonial-grid{
+    .testimonial-grid,
+    .steps{
         grid-template-columns: 1fr;
     }
 
-    .benefit-card,
-    .testimonial-card,
-    .stat-card{
-        padding: 26px;
-    }
-
-    .graffiti1{
-        font-size: 80px;
-        left: -10px;
-    }
-
-    .graffiti2{
-        font-size: 70px;
-        right: -5px;
-    }
-
-    .graffiti3{
-        font-size: 100px;
-    }
-
-    .tilt,
-    .tilt2{
-        transform: none;
+    .form-box{
+        width: 100%;
+        padding: 24px;
     }
 
     .section-title{
-        font-size: 32px;
-        margin-bottom: 45px;
+        font-size: 30px;
     }
 
-    #benefits,
-    .stats,
-    .testimonials,
-    .faq{
-        padding: 75px 20px;
+    .graffiti1{
+        font-size: 75px;
     }
 
-    footer{
-        padding: 38px 20px;
+    .graffiti2{
+        font-size: 65px;
+    }
+
+    .graffiti3{
+        font-size: 90px;
     }
 }
 </style>
