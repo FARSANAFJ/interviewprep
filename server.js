@@ -137,7 +137,7 @@ app.post("/book", async (req, res) => {
             });
 
             await resend.emails.send({
-                from: "InterviewPrep <onboarding@resend.dev>",
+                from: "InterviewPrep <support@nextinterview.online>",
                 to: email,
                 subject: "Your Interview Booking is Confirmed",
                 html: `
