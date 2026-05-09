@@ -357,6 +357,7 @@ button:hover {
         <input type="text" id="name" placeholder="Your Name" required>
 
         <input type="email" id="email" placeholder="Email Address" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
 
         <input type="date" id="date" required>
 
@@ -370,13 +371,70 @@ button:hover {
             <option value="7:00 PM">7:00 PM</option>
         </select>
 
-        <select id="type" required>
-            <option value="">Select Interview Type</option>
-            <option>Technical Interview</option>
-            <option>HR Interview</option>
-            <option>AI/ML Interview</option>
-            <option>Communication Practice</option>
-        </select>
+<select id="type" required>
+    <option value="">Select Interview Type</option>
+
+    <optgroup label="Software Development">
+        <option>Frontend Development</option>
+        <option>Backend Development</option>
+        <option>Full Stack Development</option>
+        <option>React Developer</option>
+        <option>Node.js Developer</option>
+        <option>Python Developer</option>
+        <option>Java Developer</option>
+        <option>C++ Developer</option>
+        <option>Mobile App Development</option>
+    </optgroup>
+
+    <optgroup label="AI / Data">
+        <option>AI/ML Interview</option>
+        <option>Data Science</option>
+        <option>Data Analyst</option>
+        <option>Deep Learning</option>
+        <option>Computer Vision</option>
+        <option>NLP Interview</option>
+        <option>Generative AI</option>
+    </optgroup>
+
+    <optgroup label="Core CS">
+        <option>DSA & Problem Solving</option>
+        <option>System Design</option>
+        <option>Operating Systems</option>
+        <option>DBMS</option>
+        <option>Computer Networks</option>
+        <option>OOP Concepts</option>
+    </optgroup>
+
+    <optgroup label="Cloud / DevOps">
+        <option>AWS Interview</option>
+        <option>Azure Interview</option>
+        <option>Google Cloud</option>
+        <option>DevOps</option>
+        <option>Docker & Kubernetes</option>
+    </optgroup>
+
+    <optgroup label="Cybersecurity">
+        <option>Cybersecurity</option>
+        <option>Ethical Hacking</option>
+        <option>SOC Analyst</option>
+        <option>Network Security</option>
+    </optgroup>
+
+    <optgroup label="Electronics / Embedded">
+        <option>Embedded Systems</option>
+        <option>VLSI Design</option>
+        <option>FPGA / Verilog</option>
+        <option>IoT Interview</option>
+        <option>Robotics</option>
+    </optgroup>
+
+    <optgroup label="General">
+        <option>HR Interview</option>
+        <option>Communication Practice</option>
+        <option>Behavioral Interview</option>
+        <option>Mock Placement Interview</option>
+    </optgroup>
+</select>
 
         <input type="text" id="promo" placeholder="Promo Code (Optional)">
 
