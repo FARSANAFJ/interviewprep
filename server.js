@@ -121,7 +121,7 @@ app.post("/book", async (req, res) => {
 
         try {
             await resend.emails.send({
-                from: "InterviewPrep <onboarding@resend.dev>",
+                from: "InterviewPrep <support@nextinterview.online>",
                 to: OWNER_EMAIL,
                 subject: "New Interview Booking",
                 html: `
