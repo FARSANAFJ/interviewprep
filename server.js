@@ -99,7 +99,15 @@ app.post("/create-order", async (req, res) => {
             });
         }
 
-        if (time !== "5:00 PM" && time !== "7:00 PM") {
+        const validSlots = [
+            "10:00 AM",
+            "11:00 AM",
+            "5:00 PM",
+            "7:00 PM",
+            "8:00 PM"
+        ];
+
+        if (!validSlots.includes(time)) {
             return res.status(400).json({
                 message: "Invalid time slot"
             });
@@ -222,8 +230,15 @@ app.post("/book", async (req, res) => {
                 message: "Please fill all required fields"
             });
         }
+        const validSlots = [
+            "10:00 AM",
+            "11:00 AM",
+            "5:00 PM",
+            "7:00 PM",
+            "8:00 PM"
+        ];
 
-        if (time !== "5:00 PM" && time !== "7:00 PM") {
+        if (!validSlots.includes(time)) {
             return res.status(400).json({
                 message: "Invalid time slot"
             });
