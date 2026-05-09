@@ -7,6 +7,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <style>
 * {
     margin: 0;
@@ -24,7 +26,6 @@ body {
     color: white;
 }
 
-/* NAV */
 nav {
     position: fixed;
     top: 0;
@@ -58,15 +59,12 @@ nav a:hover {
     color: black;
 }
 
-/* HERO */
 .book-hero {
     margin-top: 85px;
     min-height: calc(100vh - 85px);
-
     background:
         linear-gradient(rgba(0,0,0,0.72), rgba(0,0,0,0.82)),
         url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3') center/cover no-repeat;
-
     display: grid;
     grid-template-columns: 1fr 430px;
     gap: 50px;
@@ -98,7 +96,6 @@ nav a:hover {
     color: #f1f1f1;
 }
 
-/* FORM */
 .form-box {
     background: rgba(255,255,255,0.09);
     padding: 38px;
@@ -109,7 +106,19 @@ nav a:hover {
 .form-box h2 {
     text-align: center;
     color: #FFD700;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
+}
+
+.price-box {
+    text-align: center;
+    color: #ddd;
+    margin-bottom: 22px;
+    font-size: 14px;
+}
+
+.price-box strong {
+    color: #FFD700;
+    font-size: 20px;
 }
 
 input,
@@ -175,7 +184,6 @@ button:hover {
     font-weight: 600;
 }
 
-/* INFO SECTION */
 .info-section {
     padding: 80px 30px;
     background: linear-gradient(135deg, #000, #242424);
@@ -208,9 +216,7 @@ button:hover {
     margin-bottom: 10px;
 }
 
-/* MOBILE */
 @media(max-width: 900px) {
-
     nav{
         height: auto;
         padding: 16px 18px;
@@ -333,6 +339,7 @@ button:hover {
             <div>✓ Technical, HR, AI/ML and communication interview practice</div>
             <div>✓ Maximum 2 interviews accepted per day</div>
             <div>✓ Only two slots available daily</div>
+            <div>✓ Use promo code <b>LAUNCHFREE</b> for free booking</div>
         </div>
 
     </div>
@@ -340,6 +347,10 @@ button:hover {
     <form class="form-box" id="form">
 
         <h2>Appointment Details</h2>
+
+        <div class="price-box">
+            Booking Fee: <strong>₹199</strong>
+        </div>
 
         <input type="text" id="name" placeholder="Your Name" required>
 
@@ -351,7 +362,6 @@ button:hover {
             Maximum 2 interviews can be booked per day.
         </p>
 
-        <!-- ONLY TWO TIME OPTIONS -->
         <select id="time" required>
             <option value="">Select Time Slot</option>
             <option value="5:00 PM">5:00 PM</option>
@@ -366,13 +376,15 @@ button:hover {
             <option>Communication Practice</option>
         </select>
 
+        <input type="text" id="promo" placeholder="Promo Code (Optional)">
+
         <textarea
             id="msg"
             placeholder="Tell us what you want to improve"
         ></textarea>
 
         <button type="submit">
-            Book Appointment
+            Pay & Book Appointment
         </button>
 
         <div class="success" id="success">
@@ -399,13 +411,13 @@ button:hover {
         </div>
 
         <div class="step-card">
-            <h3>2. Practice</h3>
-            <p>Attend a realistic mock interview session.</p>
+            <h3>2. Pay Securely</h3>
+            <p>Complete payment using UPI, GPay, cards, or net banking.</p>
         </div>
 
         <div class="step-card">
             <h3>3. Improve</h3>
-            <p>Get feedback and improve your next performance.</p>
+            <p>Attend the session and receive useful feedback.</p>
         </div>
 
     </div>
@@ -413,41 +425,50 @@ button:hover {
 </section>
 
 <script>
+const API_BASE = "https://interviewprep-backend-3ve4.onrender.com";
+
 const form = document.getElementById("form");
 const success = document.getElementById("success");
 const error = document.getElementById("error");
 const dateInput = document.getElementById("date");
 const timeSelect = document.getElementById("time");
 
+let razorpayKeyId = "";
+let bookingAmount = 199;
+
 const today = new Date().toISOString().split("T")[0];
 dateInput.min = today;
 dateInput.value = today;
 
-async function loadSlots() {
+async function loadConfig() {
+    try {
+        const res = await fetch(`${API_BASE}/config`);
+        const config = await res.json();
 
+        razorpayKeyId = config.razorpayKeyId;
+        bookingAmount = config.bookingAmount || 199;
+
+    } catch {
+        console.log("Could not load payment config");
+    }
+}
+
+async function loadSlots() {
     const selectedDate = dateInput.value;
 
     if (!selectedDate) return;
 
     try {
-
-        const res = await fetch(
-            `https://interviewprep-backend-3ve4.onrender.com/slots/${selectedDate}`
-        );
-
+        const res = await fetch(`${API_BASE}/slots/${selectedDate}`);
         const slots = await res.json();
 
         [...timeSelect.options].forEach(option => {
-
             if (!option.value) return;
 
             if (slots[option.value] === "booked") {
-
                 option.disabled = true;
                 option.textContent = option.value + " - Booked";
-
             } else {
-
                 option.disabled = false;
                 option.textContent = option.value + " - Available";
             }
@@ -456,29 +477,28 @@ async function loadSlots() {
         timeSelect.value = "";
 
     } catch {
-
         console.log("Could not load slots");
     }
 }
 
 dateInput.addEventListener("change", loadSlots);
 
+loadConfig();
 loadSlots();
 
-form.addEventListener("submit", async function(e){
-
+form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
     success.style.display = "none";
     error.style.display = "none";
 
     const data = {
-
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
         date: document.getElementById("date").value,
         time: document.getElementById("time").value,
         type: document.getElementById("type").value,
+        promo: document.getElementById("promo").value,
         msg: document.getElementById("msg").value
     };
 
@@ -490,6 +510,7 @@ Email: ${data.email}
 Date: ${data.date}
 Time: ${data.time}
 Type: ${data.type}
+Promo: ${data.promo || "None"}
 
 Are you sure?
     `);
@@ -497,49 +518,106 @@ Are you sure?
     if (!confirmed) return;
 
     try {
+        const orderRes = await fetch(`${API_BASE}/create-order`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
 
-        const res = await fetch(
-            "https://interviewprep-backend-3ve4.onrender.com/book",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
+        const orderResult = await orderRes.json();
+
+        if (!orderRes.ok) {
+            error.innerText = orderResult.message;
+            error.style.display = "block";
+            alert(orderResult.message);
+            return;
+        }
+
+        if (orderResult.freeBooking) {
+            await confirmBooking(data);
+            return;
+        }
+
+        const options = {
+            key: razorpayKeyId,
+            amount: orderResult.order.amount,
+            currency: orderResult.order.currency,
+            name: "InterviewPrep",
+            description: "Mock Interview Booking",
+            order_id: orderResult.order.id,
+
+            prefill: {
+                name: data.name,
+                email: data.email
+            },
+
+            theme: {
+                color: "#FFD700"
+            },
+
+            handler: async function(paymentResponse) {
+                const paidBookingData = {
+                    ...data,
+                    razorpay_order_id: paymentResponse.razorpay_order_id,
+                    razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                    razorpay_signature: paymentResponse.razorpay_signature
+                };
+
+                await confirmBooking(paidBookingData);
+            },
+
+            modal: {
+                ondismiss: function() {
+                    alert("Payment cancelled. Booking was not saved.");
+                }
             }
-        );
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+
+    } catch {
+        error.innerText = "Could not connect to server";
+        error.style.display = "block";
+        alert("Could not connect to server");
+    }
+});
+
+async function confirmBooking(data) {
+    try {
+        const res = await fetch(`${API_BASE}/book`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
 
         const result = await res.json();
 
         if (res.ok) {
-
             success.innerText = result.message;
             success.style.display = "block";
-
             alert(result.message);
 
             form.reset();
-
             dateInput.value = today;
-
             await loadSlots();
 
         } else {
-
             error.innerText = result.message;
             error.style.display = "block";
-
             alert(result.message);
         }
 
     } catch {
-
         error.innerText = "Could not connect to server";
         error.style.display = "block";
-
         alert("Could not connect to server");
     }
-});
+}
 </script>
 
 </body>
