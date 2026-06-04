@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NextInterview Coding Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins',sans-serif;background:#111;color:white}nav{position:fixed;top:0;width:100%;height:85px;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 60px;z-index:999}nav b{color:#FFD700;font-size:28px}nav a{color:white;text-decoration:none;margin-left:20px;padding:8px 14px;border-radius:6px;font-size:15px;transition:.3s}nav a:hover{background:#FFD700;color:black}.page{padding:115px 35px 35px;min-height:100vh}.header{max-width:1200px;margin:0 auto 22px;display:flex;justify-content:space-between;gap:20px;align-items:center}.header h1{color:#FFD700;font-size:36px}.header p{color:#bbb;margin-top:8px}.layout{max-width:1200px;margin:auto;display:grid;grid-template-columns:390px 1fr;gap:22px}.panel{background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.16);border-radius:22px;padding:24px}.problem-list{display:grid;gap:12px;margin-top:18px}.problem-btn{background:#1f1f1f;border:1px solid rgba(255,255,255,.08);color:white;border-radius:14px;padding:14px;text-align:left;cursor:pointer;font-family:inherit}.problem-btn:hover,.problem-btn.active{border-color:#FFD700}.badge{display:inline-block;margin-left:8px;color:#111;background:#FFD700;border-radius:20px;font-size:12px;padding:3px 10px;font-weight:700}.problem h2{color:#FFD700;margin-bottom:10px}.problem h3{color:#FFD700;margin:18px 0 8px;font-size:16px}.problem p,.problem pre{color:#ddd;line-height:1.7}.problem pre{background:#050505;border-radius:12px;padding:12px;white-space:pre-wrap}.toolbar{display:flex;gap:12px;margin-bottom:12px;align-items:center}.toolbar select,.toolbar input{background:#222;color:white;border:none;border-radius:10px;padding:11px;font-family:inherit}.toolbar button,.runbar button{background:#FFD700;color:#111;border:none;border-radius:25px;padding:12px 20px;font-weight:700;cursor:pointer;font-family:inherit}.editor-card{overflow:hidden}.editor{height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}.io{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.io textarea,.output{width:100%;height:135px;background:#050505;color:white;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;font-family:monospace;resize:none;overflow:auto;white-space:pre-wrap}.runbar{display:flex;gap:12px;margin-top:12px}.runbar button.secondary{background:#222;color:white;border:1px solid rgba(255,215,0,.32)}.result{margin-top:12px;background:#050505;border-radius:14px;padding:14px;min-height:70px;color:#ddd;white-space:pre-wrap}.pass{color:#5cff9d;font-weight:700}.fail{color:#ff7070;font-weight:700}@media(max-width:900px){nav{height:75px;padding:0 18px}nav b{font-size:22px}nav a{display:none}nav a:last-child{display:inline-block}.page{padding:95px 16px 22px}.layout{grid-template-columns:1fr}.header{display:block}.header h1{font-size:28px}.io{grid-template-columns:1fr}.editor{height:360px}}
+</style>
+</head>
+<body>
+<nav>
+    <b>NextInterview</b>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="book.html">Book</a>
+        <a href="coding.html">Coding</a>
+    </div>
+</nav>
+
+<main class="page">
+    <div class="header">
+        <div>
+            <h1>Coding Practice</h1>
+            <p>Practice LeetCode-style questions with sample tests and hidden test submission.</p>
+        </div>
+    </div>
+
+    <div class="layout">
+        <section class="panel">
+            <h2 style="color:#FFD700">Problems</h2>
+            <div id="problemList" class="problem-list">Loading problems...</div>
+            <div id="problem" class="problem" style="margin-top:24px"></div>
+        </section>
+
+        <section class="panel editor-card">
+            <div class="toolbar">
+                <select id="language">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="cpp">C++</option>
+                    <option value="c">C</option>
+                    <option value="java">Java</option>
+                </select>
+                <span id="status" style="color:#bbb;font-size:14px">Ready</span>
+            </div>
+
+            <div id="editor" class="editor"></div>
+
+            <div class="io">
+                <div>
+                    <h3 style="color:#FFD700;margin:14px 0 8px">Custom Input</h3>
+                    <textarea id="customInput" placeholder="Enter input here"></textarea>
+                </div>
+                <div>
+                    <h3 style="color:#FFD700;margin:14px 0 8px">Output</h3>
+                    <div id="output" class="output">Output will appear here.</div>
+                </div>
+            </div>
+
+            <div class="runbar">
+                <button id="runBtn">Run Code</button>
+                <button id="submitBtn" class="secondary">Submit</button>
+            </div>
+
+            <div id="result" class="result">Submit result will appear here.</div>
+        </section>
+    </div>
+</main>
+
+<script>
+const API_BASE = "https://interviewprep-backend-3ve4.onrender.com";
+let editor;
+let currentProblem;
+let problems = [];
+
+const monacoLanguageMap = {
+    javascript: "javascript",
+    python: "python",
+    cpp: "cpp",
+    c: "c",
+    java: "java"
+};
+
+require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs" }});
+require(["vs/editor/editor.main"], function () {
+    editor = monaco.editor.create(document.getElementById("editor"), {
+        value: "// Loading...",
+        language: "javascript",
+        theme: "vs-dark",
+        automaticLayout: true,
+        fontSize: 15,
+        minimap: { enabled: false }
+    });
+    loadProblems();
+});
+
+async function loadProblems(){
+    try{
+        const res = await fetch(`${API_BASE}/coding/problems`);
+        problems = await res.json();
+        const list = document.getElementById("problemList");
+        list.innerHTML = "";
+        problems.forEach((p, index)=>{
+            const btn = document.createElement("button");
+            btn.className = "problem-btn";
+            btn.innerHTML = `${p.title} <span class="badge">${p.difficulty}</span>`;
+            btn.onclick = () => loadProblem(p.id, btn);
+            list.appendChild(btn);
+            if(index === 0) setTimeout(()=>btn.click(), 50);
+        });
+    }catch(e){
+        document.getElementById("problemList").innerText = "Could not load problems.";
+    }
+}
+
+async function loadProblem(id, button){
+    document.querySelectorAll(".problem-btn").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    const res = await fetch(`${API_BASE}/coding/problems/${id}`);
+    currentProblem = await res.json();
+
+    document.getElementById("problem").innerHTML = `
+        <h2>${currentProblem.title}</h2>
+        <p><span class="badge">${currentProblem.difficulty}</span></p>
+        <h3>Problem</h3><p>${currentProblem.statement}</p>
+        <h3>Input Format</h3><p>${currentProblem.inputFormat}</p>
+        <h3>Output Format</h3><p>${currentProblem.outputFormat}</p>
+        <h3>Sample Input</h3><pre>${currentProblem.sampleInput}</pre>
+        <h3>Sample Output</h3><pre>${currentProblem.sampleOutput}</pre>
+    `;
+
+    document.getElementById("customInput").value = currentProblem.sampleInput;
+    setStarterCode();
+}
+
+function setStarterCode(){
+    if(!currentProblem || !editor) return;
+    const lang = document.getElementById("language").value;
+    editor.setValue(currentProblem.starterCode[lang] || "");
+    monaco.editor.setModelLanguage(editor.getModel(), monacoLanguageMap[lang]);
+}
+
+document.getElementById("language").addEventListener("change", setStarterCode);
+
+document.getElementById("runBtn").addEventListener("click", async ()=>{
+    await runCode(false);
+});
+
+document.getElementById("submitBtn").addEventListener("click", async ()=>{
+    await submitCode();
+});
+
+async function runCode(){
+    document.getElementById("status").innerText = "Running...";
+    document.getElementById("output").innerText = "Running...";
+
+    try{
+        const res = await fetch(`${API_BASE}/coding/run`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                code: editor.getValue(),
+                language: document.getElementById("language").value,
+                input: document.getElementById("customInput").value
+            })
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.message || "Run failed");
+
+        const output = data.stdout || data.stderr || data.compile_output || "No output";
+        document.getElementById("output").innerText = output;
+        document.getElementById("status").innerText = data.status;
+    }catch(e){
+        document.getElementById("output").innerText = e.message;
+        document.getElementById("status").innerText = "Error";
+    }
+}
+
+async function submitCode(){
+    if(!currentProblem) return;
+    document.getElementById("status").innerText = "Submitting...";
+    document.getElementById("result").innerText = "Checking test cases...";
+
+    try{
+        const res = await fetch(`${API_BASE}/coding/submit`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                problemId: currentProblem.id,
+                code: editor.getValue(),
+                language: document.getElementById("language").value
+            })
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.message || "Submit failed");
+
+        let html = data.accepted
+            ? `<span class="pass">Accepted: ${data.passed}/${data.total} passed</span>\n\n`
+            : `<span class="fail">Wrong Answer: ${data.passed}/${data.total} passed</span>\n\n`;
+
+        data.results.forEach(r=>{
+            html += `Test ${r.test} ${r.hidden ? "(Hidden)" : ""}: ${r.status}\n`;
+            if(!r.hidden){
+                html += `Input: ${r.input}\nExpected: ${r.expected}\nActual: ${r.actual}\n`;
+            }
+            html += `\n`;
+        });
+
+        document.getElementById("result").innerHTML = html;
+        document.getElementById("status").innerText = data.accepted ? "Accepted" : "Submitted";
+    }catch(e){
+        document.getElementById("result").innerText = e.message;
+        document.getElementById("status").innerText = "Error";
+    }
+}
+</script>
+</body>
+</html>

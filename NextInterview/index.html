@@ -12,6 +12,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>InterviewPrep</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -98,8 +99,15 @@ nav a:hover {
     animation: fadeUp 1.2s ease;
 }
 
-.hero button {
+.hero-buttons {
     margin-top: 35px;
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero button {
     padding: 15px 38px;
     border: none;
     border-radius: 35px;
@@ -112,6 +120,17 @@ nav a:hover {
 
 .hero button:hover {
     transform: translateY(-3px);
+}
+
+.secondary-btn {
+    background: transparent !important;
+    color: #FFD700 !important;
+    border: 2px solid #FFD700 !important;
+}
+
+.secondary-btn:hover {
+    background: #FFD700 !important;
+    color: black !important;
 }
 
 /* COMMON */
@@ -269,6 +288,70 @@ nav a:hover {
     transform: rotate(2deg);
 }
 
+/* FREE PRACTICE SECTION */
+.practice-section {
+    padding: 110px 30px;
+    background:
+        linear-gradient(rgba(0,0,0,0.78), rgba(0,0,0,0.9)),
+        url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4') center/cover no-repeat;
+    text-align: center;
+}
+
+.practice-box {
+    max-width: 900px;
+    margin: auto;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 30px;
+    padding: 50px 35px;
+    backdrop-filter: blur(10px);
+}
+
+.practice-box h2 {
+    color: #FFD700;
+    font-size: 42px;
+    margin-bottom: 18px;
+}
+
+.practice-box p {
+    color: #ddd;
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.practice-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 35px;
+}
+
+.practice-tags span {
+    background: rgba(255,215,0,0.12);
+    color: #FFD700;
+    border: 1px solid rgba(255,215,0,0.25);
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-size: 14px;
+}
+
+.practice-box button {
+    padding: 15px 38px;
+    border: none;
+    border-radius: 35px;
+    background: #FFD700;
+    color: black;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.practice-box button:hover {
+    transform: translateY(-3px);
+}
+
 /* STATS */
 .stats {
     padding: 90px 30px;
@@ -413,7 +496,7 @@ footer p {
 /* MOBILE */
 @media(max-width: 900px) {
 
-    nav{
+    nav {
         height: 75px;
         padding: 0 18px;
         flex-direction: row;
@@ -421,20 +504,20 @@ footer p {
         align-items: center;
     }
 
-    nav b{
+    nav b {
         font-size: 22px;
     }
 
-    nav div{
+    nav div {
         display: flex;
         align-items: center;
     }
 
-    nav a{
+    nav a {
         display: none;
     }
 
-    nav a:last-child{
+    nav a:last-child {
         display: block;
         margin-left: 0;
         padding: 8px 14px;
@@ -442,50 +525,76 @@ footer p {
     }
 
     .hero,
-    .book-hero{
+    .book-hero {
         margin-top: 75px;
         min-height: auto;
         padding: 40px 18px;
     }
 
     .hero h1,
-    .hero-text h1{
+    .hero-text h1 {
         font-size: 36px;
         line-height: 1.15;
     }
 
     .hero p,
-    .hero-text p{
+    .hero-text p {
         font-size: 15px;
         line-height: 1.7;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .hero button {
+        width: 240px;
     }
 
     .benefit-layout,
     .stats-grid,
     .testimonial-grid,
-    .steps{
+    .steps {
         grid-template-columns: 1fr;
     }
 
-    .form-box{
+    .form-box {
         width: 100%;
         padding: 24px;
     }
 
-    .section-title{
+    .section-title {
         font-size: 30px;
     }
 
-    .graffiti1{
+    .graffiti1 {
         font-size: 75px;
     }
 
-    .graffiti2{
+    .graffiti2 {
         font-size: 65px;
     }
 
-    .graffiti3{
+    .graffiti3 {
         font-size: 90px;
+    }
+
+    .practice-section {
+        padding: 70px 18px;
+    }
+
+    .practice-box {
+        padding: 35px 22px;
+    }
+
+    .practice-box h2 {
+        font-size: 30px;
+    }
+
+    .practice-box p {
+        font-size: 15px;
     }
 }
 </style>
@@ -499,6 +608,7 @@ footer p {
     <div>
         <a href="index.html">Home</a>
         <a href="#benefits">Benefits</a>
+        <a href="practice.html">Practice</a>
         <a href="book.html">Book</a>
     </div>
 </nav>
@@ -506,11 +616,20 @@ footer p {
 <section class="hero">
     <div>
         <h1>Crack Your Next Interview</h1>
-        <p>Experience real mock interviews with human interviewers and industry-style feedback.</p>
 
-        <a href="book.html">
-            <button>Book an Interview</button>
-        </a>
+        <p>
+            Experience real mock interviews with human interviewers and industry-style feedback.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="book.html">
+                <button>Book an Interview</button>
+            </a>
+
+            <a href="practice.html">
+                <button class="secondary-btn">Free Coding Practice</button>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -529,24 +648,54 @@ footer p {
         <div class="benefit-card tilt">
             <span>01</span>
             <h3>Real Interview Practice</h3>
-            <p>Experience realistic interview environments designed to simulate actual hiring rounds.</p>
+            <p>
+                Experience realistic interview environments designed to simulate actual hiring rounds.
+            </p>
         </div>
 
         <div class="benefit-card">
             <span>02</span>
             <h3>Build Confidence</h3>
-            <p>Improve speaking confidence, clarity, and pressure handling through guided practice.</p>
+            <p>
+                Improve speaking confidence, clarity, and pressure handling through guided practice.
+            </p>
         </div>
 
         <div class="benefit-card tilt2">
             <span>03</span>
             <h3>Expert Feedback</h3>
-            <p>Receive actionable insights and personalized improvement suggestions after every session.</p>
+            <p>
+                Receive actionable insights and personalized improvement suggestions after every session.
+            </p>
         </div>
     </div>
 </section>
 
 <div class="section-line"></div>
+
+<section class="practice-section">
+    <div class="practice-box">
+        <h2>Free Coding Practice</h2>
+
+        <p>
+            Prepare for placement coding rounds with beginner-friendly company-style problems.
+            Practice TCS-style, Infosys-style, Wipro-style and general placement questions for free.
+        </p>
+
+        <div class="practice-tags">
+            <span>TCS-style</span>
+            <span>Infosys-style</span>
+            <span>Wipro-style</span>
+            <span>Cognizant-style</span>
+            <span>DSA Basics</span>
+            <span>Output Practice</span>
+        </div>
+
+        <a href="practice.html">
+            <button>Start Free Practice</button>
+        </a>
+    </div>
+</section>
 
 <section class="stats">
     <h2 class="section-title">Built for Better Preparation</h2>
@@ -569,7 +718,8 @@ footer p {
     </div>
 </section>
 
-<!--<section class="testimonials" id="testimonials">
+<!--
+<section class="testimonials" id="testimonials">
     <h2 class="section-title">What Students Say</h2>
 
     <div class="testimonial-grid">
@@ -588,7 +738,8 @@ footer p {
             <h4>Yusuf</h4>
         </div>
     </div>
-</section>-->
+</section>
+-->
 
 <section class="faq">
     <h2 class="section-title">Frequently Asked Questions</h2>
@@ -596,52 +747,86 @@ footer p {
     <div class="faq-box">
         <details>
             <summary>How many interviews can be booked per day?</summary>
-            <p>We accept only a limited number of interview bookings daily so each candidate receives proper attention and detailed interaction.</p>
+            <p>
+                We accept only a limited number of interview bookings daily so each candidate receives proper attention and detailed interaction.
+            </p>
         </details>
 
         <details>
             <summary>What interview types are available?</summary>
-            <p>You can choose from software development, AI/ML, HR, communication, system design, DSA, cloud, cybersecurity, embedded systems, and many more interview domains.</p>
+            <p>
+                You can choose from software development, AI/ML, HR, communication, system design, DSA, cloud, cybersecurity, embedded systems, and many more interview domains.
+            </p>
         </details>
 
         <details>
             <summary>Who will conduct the interview?</summary>
-            <p>Your interview will be conducted by real human interviewers with experience in technical, academic, or industry-focused interview environments.</p>
+            <p>
+                Your interview will be conducted by real human interviewers with experience in technical, academic, or industry-focused interview environments.
+            </p>
+        </details>
+
+        <details>
+            <summary>Is coding practice free?</summary>
+            <p>
+                Yes. The coding practice section is free. Students can try placement-style coding questions and check their answers instantly.
+            </p>
+        </details>
+
+        <details>
+            <summary>Are these official company questions?</summary>
+            <p>
+                No. The questions are company-style practice questions inspired by common placement patterns. They are meant for learning and preparation.
+            </p>
         </details>
 
         <details>
             <summary>Is this suitable for beginners?</summary>
-            <p>Yes. Sessions are available for beginners, intermediate learners, and advanced candidates preparing for placements, internships, or professional roles.</p>
+            <p>
+                Yes. Sessions and practice questions are available for beginners, intermediate learners, and advanced candidates preparing for placements, internships, or professional roles.
+            </p>
         </details>
 
         <details>
             <summary>Will I get feedback after the interview?</summary>
-            <p>Yes. Every session includes personalized feedback to help improve confidence, communication, technical understanding, and interview performance.</p>
+            <p>
+                Yes. Every paid interview session includes personalized feedback to help improve confidence, communication, technical understanding, and interview performance.
+            </p>
         </details>
 
         <details>
             <summary>Are AI/ML interviews available?</summary>
-            <p>Yes. AI/ML-focused interviews covering Python, machine learning, deep learning, data science, and related topics are available.</p>
+            <p>
+                Yes. AI/ML-focused interviews covering Python, machine learning, deep learning, data science, and related topics are available.
+            </p>
         </details>
 
         <details>
             <summary>Can I request a specific interview area?</summary>
-            <p>Yes. You can select your preferred interview domain while booking, and sessions are arranged accordingly.</p>
+            <p>
+                Yes. You can select your preferred interview domain while booking, and sessions are arranged accordingly.
+            </p>
         </details>
 
         <details>
             <summary>Will the interview feel like a real placement interview?</summary>
-            <p>Yes. The sessions are designed to simulate realistic interview environments with live interaction, problem-solving, and communication assessment.</p>
+            <p>
+                Yes. The sessions are designed to simulate realistic interview environments with live interaction, problem-solving, and communication assessment.
+            </p>
         </details>
 
         <details>
             <summary>Can I book multiple sessions?</summary>
-            <p>Yes. You may book multiple interview sessions based on slot availability.</p>
+            <p>
+                Yes. You may book multiple interview sessions based on slot availability.
+            </p>
         </details>
 
         <details>
             <summary>How will I attend the interview?</summary>
-            <p>Interview details and joining instructions will be shared through email after booking confirmation.</p>
+            <p>
+                Interview details and joining instructions will be shared through email after booking confirmation.
+            </p>
         </details>
     </div>
 </section>

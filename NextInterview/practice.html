@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Free Interview Flashcards | NextInterview</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #111;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 85px;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+    z-index: 999;
+}
+
+nav b {
+    color: #FFD700;
+    font-size: 28px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    background: #FFD700;
+    color: black;
+}
+
+/* HERO */
+.practice-hero {
+    margin-top: 85px;
+    min-height: 390px;
+    background:
+        linear-gradient(rgba(0,0,0,0.68), rgba(0,0,0,0.88)),
+        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 25px;
+}
+
+.practice-hero h1 {
+    font-size: 58px;
+    line-height: 1.1;
+    color: #FFD700;
+    font-weight: 900;
+    margin-bottom: 18px;
+}
+
+.practice-hero p {
+    max-width: 850px;
+    margin: auto;
+    color: #e5e5e5;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+/* MAIN */
+.practice-section {
+    padding: 70px 25px 100px;
+    background: linear-gradient(135deg, #0d0d0d, #1b1b1b);
+}
+
+.practice-wrapper {
+    max-width: 1150px;
+    margin: auto;
+}
+
+.top-panel {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,215,0,0.18);
+    border-radius: 28px;
+    padding: 28px;
+    margin-bottom: 30px;
+}
+
+.top-panel h2 {
+    color: #FFD700;
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.top-panel p {
+    color: #ccc;
+    line-height: 1.7;
+}
+
+.controls {
+    margin-top: 25px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+select,
+input {
+    padding: 13px 16px;
+    border: none;
+    border-radius: 12px;
+    background: #222;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+}
+
+select {
+    min-width: 230px;
+}
+
+input {
+    flex: 1;
+    min-width: 240px;
+}
+
+select:focus,
+input:focus {
+    border: 1px solid rgba(255,215,0,0.55);
+}
+
+/* FLASHCARD AREA */
+.flash-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 28px;
+    align-items: start;
+}
+
+.flashcard {
+    min-height: 430px;
+    background:
+        radial-gradient(circle at top right, rgba(255,215,0,0.12), transparent 40%),
+        rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 30px;
+    padding: 34px;
+    position: relative;
+    overflow: hidden;
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(255,215,0,0.15);
+    color: #FFD700;
+    border: 1px solid rgba(255,215,0,0.25);
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.question-count {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.question-title {
+    color: #FFD700;
+    font-size: 34px;
+    line-height: 1.25;
+    margin-bottom: 22px;
+}
+
+.answer-box {
+    display: none;
+    margin-top: 24px;
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.answer-box h3 {
+    color: #FFD700;
+    margin-bottom: 14px;
+}
+
+.answer-box p,
+.answer-box li {
+    color: #e1e1e1;
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+.answer-box ul {
+    padding-left: 22px;
+    margin-top: 10px;
+}
+
+.answer-box table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    color: #ddd;
+    font-size: 14px;
+}
+
+.answer-box th,
+.answer-box td {
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.answer-box th {
+    color: #FFD700;
+    background: rgba(255,215,0,0.08);
+}
+
+.button-row {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 13px 24px;
+    border: none;
+    border-radius: 28px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.primary-btn {
+    background: #FFD700;
+    color: black;
+}
+
+.secondary-btn {
+    background: transparent;
+    color: #FFD700;
+    border: 2px solid #FFD700;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+
+/* STUDENT WRITING AREA */
+.write-box {
+    margin-top: 18px;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 18px;
+    padding: 18px;
+}
+
+.write-box label {
+    display: block;
+    color: #FFD700;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.write-box textarea {
+    width: 100%;
+    min-height: 130px;
+    resize: vertical;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: #141414;
+    color: #f2f2f2;
+    padding: 14px;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.7;
+    outline: none;
+}
+
+.write-box textarea:focus {
+    border-color: rgba(255,215,0,0.45);
+}
+
+.write-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.small-btn {
+    padding: 9px 16px;
+    border-radius: 20px;
+    background: #FFD700;
+    color: #111;
+    font-size: 13px;
+}
+
+.small-btn.ghost {
+    background: transparent;
+    color: #FFD700;
+    border: 1px solid rgba(255,215,0,0.45);
+}
+
+.compare-box {
+    display: none;
+    margin-top: 20px;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.compare-box h3 {
+    color: #FFD700;
+    margin-bottom: 10px;
+}
+
+.compare-box p,
+.compare-box li {
+    color: #dedede;
+    line-height: 1.8;
+}
+
+.compare-box ul {
+    padding-left: 20px;
+}
+
+/* CALMER PROFESSIONAL THEME OVERRIDES */
+nav b,
+.practice-hero h1,
+.top-panel h2,
+.badge,
+.question-title,
+.answer-box h3,
+.answer-box th,
+.side-panel h3,
+.stat b,
+.question-list-section h2,
+.question-mini-card span,
+footer b {
+    color: #FFD700;
+}
+
+nav a:hover,
+.primary-btn {
+    background: #FFD700;
+    color: #111;
+}
+
+.secondary-btn {
+    color: #FFD700;
+    border-color: #FFD700;
+}
+
+body {
+    background: #101010;
+}
+
+.practice-hero {
+    background:
+        linear-gradient(rgba(12,12,12,0.78), rgba(12,12,12,0.92)),
+        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f') center/cover no-repeat;
+}
+
+.practice-section {
+    background: #121212;
+}
+
+.top-panel,
+.flashcard,
+.side-panel,
+.question-mini-card {
+    background: #1a1a1a;
+    border-color: rgba(255,215,0,0.16);
+    box-shadow: none;
+}
+
+.flashcard {
+    background: #1a1a1a;
+}
+
+.badge {
+    background: rgba(255,215,0,0.10);
+    border-color: rgba(255,215,0,0.22);
+}
+
+.answer-box th {
+    background: rgba(255,215,0,0.08);
+}
+
+.question-mini-card:hover,
+button:hover {
+    transform: none;
+}
+
+/* SIDE PANEL */
+.side-panel {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,215,0,0.16);
+    border-radius: 26px;
+    padding: 24px;
+}
+
+.side-panel h3 {
+    color: #FFD700;
+    margin-bottom: 18px;
+}
+
+.stat {
+    background: rgba(0,0,0,0.35);
+    padding: 18px;
+    border-radius: 18px;
+    margin-bottom: 14px;
+}
+
+.stat b {
+    color: #FFD700;
+    font-size: 28px;
+}
+
+.stat p {
+    color: #bbb;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.tip {
+    margin-top: 20px;
+    color: #ccc;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+/* LIST SECTION */
+.question-list-section {
+    margin-top: 35px;
+}
+
+.question-list-section h2 {
+    color: #FFD700;
+    margin-bottom: 20px;
+}
+
+.question-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.question-mini-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,215,0,0.13);
+    padding: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.question-mini-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.09);
+}
+
+.question-mini-card span {
+    color: #FFD700;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.question-mini-card h4 {
+    margin-top: 8px;
+    color: white;
+    line-height: 1.5;
+}
+
+/* FOOTER */
+footer {
+    padding: 45px 30px;
+    background: #050505;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+footer b {
+    color: #FFD700;
+    font-size: 24px;
+}
+
+footer p {
+    margin-top: 12px;
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* MOBILE */
+@media(max-width: 900px) {
+    nav {
+        height: 75px;
+        padding: 0 18px;
+    }
+
+    nav b {
+        font-size: 22px;
+    }
+
+    nav div {
+        display: flex;
+        align-items: center;
+    }
+
+    nav a {
+        display: none;
+    }
+
+    nav a:last-child {
+        display: block;
+        margin-left: 0;
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+
+    .practice-hero {
+        margin-top: 75px;
+        min-height: auto;
+        padding: 55px 18px;
+    }
+
+    .practice-hero h1 {
+        font-size: 36px;
+    }
+
+    .practice-hero p {
+        font-size: 15px;
+    }
+
+    .flash-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .question-title {
+        font-size: 26px;
+    }
+
+    .question-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .controls {
+        flex-direction: column;
+    }
+
+    select,
+    input {
+        width: 100%;
+    }
+}
+
+
+/* SAME BRAND THEME AS HOME PAGE, WITH THE ORIGINAL PRACTICE IMAGE AND SOFT GLOW */
+.practice-hero {
+    background:
+        linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.78)),
+        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f') center/cover no-repeat;
+}
+
+.practice-section {
+    background: linear-gradient(135deg, #0d0d0d, #1d1d1d);
+}
+
+.top-panel,
+.flashcard,
+.side-panel,
+.question-mini-card,
+.write-box,
+.compare-box {
+    background: rgba(255,255,255,0.065);
+    border: 1px solid rgba(255,215,0,0.18);
+    box-shadow: 0 0 22px rgba(255,215,0,0.045);
+    backdrop-filter: blur(6px);
+}
+
+.flashcard {
+    background:
+        radial-gradient(circle at top right, rgba(255,215,0,0.10), transparent 36%),
+        rgba(255,255,255,0.07);
+}
+
+.badge,
+.practice-pill {
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.24);
+    color: #FFD700;
+}
+
+.answer-box {
+    background: rgba(0,0,0,0.38);
+    border: 1px solid rgba(255,255,255,0.09);
+}
+
+.question-title,
+.practice-hero h1,
+.top-panel h2,
+.answer-box h3,
+.side-panel h3,
+.stat b,
+.question-list-section h2,
+.question-mini-card span,
+footer b,
+.write-box label,
+.compare-box h3 {
+    color: #FFD700;
+}
+
+button:hover,
+.question-mini-card:hover {
+    transform: translateY(-2px);
+}
+
+.question-mini-card:hover {
+    background: rgba(255,255,255,0.09);
+}
+
+/* remove the earlier radial shine from the card */
+.flashcard::before {
+    display: none;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+    <b>NextInterview</b>
+
+    <div>
+        <a href="index.html">Home</a>
+        <a href="practice.html">Practice</a>
+        <a href="book.html">Book</a>
+    </div>
+</nav>
+
+<section class="practice-hero">
+    <div>
+        <h1>Free Interview Flashcards</h1>
+        <p>
+            Practice important placement interview questions in a simple flashcard style.
+            Write your own answer first, then reveal the suggested answer and compare.
+        </p>
+    </div>
+</section>
+
+<section class="practice-section">
+    <div class="practice-wrapper">
+
+        <div class="top-panel">
+            <h2>Practice Before Your Interview</h2>
+            <p>
+                These are company-style preparation questions for freshers and placement candidates.
+                They cover programming basics, C/C++, OOPs, Python, Java, OS, DBMS, SQL, networks,
+                testing, system design, aptitude, HR, and company-style interview practice.
+            </p>
+
+            <div class="controls">
+                <select id="categoryFilter" onchange="filterQuestions()">
+                    <option value="All">All Categories</option>
+                    <option value="C/C++">C/C++</option>
+                    <option value="Data Structures">Data Structures</option>
+                    <option value="OOPs">OOPs</option>
+                    <option value="Python">Python</option>
+                    <option value="Java">Java</option>
+                    <option value="Operating System">Operating System</option>
+                    <option value="Aptitude & Reasoning">Aptitude & Reasoning</option>
+                    <option value="DBMS & SQL">DBMS & SQL</option>
+                    <option value="Networks & Testing">Networks & Testing</option>
+                    <option value="System Design">System Design</option>
+                    <option value="HR Interview">HR Interview</option>
+                    <option value="TCS NQT-style">TCS NQT-style</option>
+                    <option value="Infosys-style">Infosys-style</option>
+                    <option value="Wipro-style">Wipro-style</option>
+                    <option value="Cognizant-style">Cognizant-style</option>
+                    <option value="Interview Tips">Interview Tips</option>
+                </select>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search questions..."
+                    oninput="filterQuestions()"
+                >
+            </div>
+        </div>
+
+        <div class="flash-layout">
+
+            <div class="flashcard">
+                <div class="badge" id="categoryBadge">Category</div>
+                <div class="question-count" id="questionCount">Question 1 of 1</div>
+
+                <h2 class="question-title" id="questionTitle">
+                    Loading question...
+                </h2>
+
+                <div class="write-box">
+                    <label for="studentAnswer">Write your answer first</label>
+                    <textarea id="studentAnswer" placeholder="Type your answer in your own words. Then click Show Answer to compare."></textarea>
+                    <div class="write-actions">
+                        <button class="small-btn" onclick="saveStudentAnswer()">Save My Answer</button>
+                        <button class="small-btn ghost" onclick="clearStudentAnswer()">Clear</button>
+                    </div>
+                </div>
+
+                <div class="compare-box" id="compareBox">
+                    <h3>Your Answer</h3>
+                    <p id="myAnswerText"></p>
+                    <h3 style="margin-top:14px;">Compare Checklist</h3>
+                    <ul>
+                        <li>Did you answer the main point directly?</li>
+                        <li>Did you use simple examples where needed?</li>
+                        <li>Did you avoid memorised or overly long sentences?</li>
+                    </ul>
+                </div>
+
+                <div class="answer-box" id="answerBox">
+                    <h3>Suggested Answer</h3>
+                    <div id="answerText"></div>
+                </div>
+
+                <div class="button-row">
+                    <button class="primary-btn" onclick="showAnswer()">Show Answer</button>
+                    <button class="secondary-btn" onclick="previousQuestion()">Previous</button>
+                    <button class="secondary-btn" onclick="nextQuestion()">Next</button>
+                    <button class="secondary-btn" onclick="randomQuestion()">Random</button>
+                </div>
+            </div>
+
+            <div class="side-panel">
+                <h3>Your Practice Panel</h3>
+
+                <div class="stat">
+                    <b id="totalCount">0</b>
+                    <p>Total questions available</p>
+                </div>
+
+                <div class="stat">
+                    <b id="categoryCount">0</b>
+                    <p>Questions in selected category</p>
+                </div>
+
+                <div class="stat">
+                    <b id="viewedCount">0</b>
+                    <p>Cards opened in this session</p>
+                </div>
+
+                <p class="tip">
+                    Tip: First answer in your own words before clicking “Show Answer”.
+                    Interviewers usually prefer clear and simple explanations, not memorised answers.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="question-list-section">
+            <h2>All Practice Questions</h2>
+            <div class="question-grid" id="questionGrid"></div>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <b>NextInterview</b>
+    <p>Practice smarter. Speak better. Interview with confidence.</p>
+</footer>
+
+<script>
+const questions = [
+    {
+        category: "C/C++",
+        question: "What is the use of return 0?",
+        answer: `
+            <p><b>return 0</b> indicates that the program has executed successfully.</p>
+            <p>It is a standard convention in C and C++ programs. When the main function returns 0, it tells the operating system that the program ended without errors.</p>
+        `
+    },
+    {
+        category: "C/C++",
+        question: "Explain pointers in C++.",
+        answer: `
+            <p>Pointers are variables that store the memory address of another variable.</p>
+            <p>They allow direct access to data stored in memory. Pointers are useful when working with large data because the program can work with references instead of copying values.</p>
+        `
+    },
+    {
+        category: "C/C++",
+        question: "What is the difference between an array and a pointer?",
+        answer: `
+            <p>An array stores multiple values of the same data type in continuous memory locations.</p>
+            <p>A pointer stores the address of a variable.</p>
+            <p>Arrays are simple and fixed in structure, while pointers are more flexible but require careful handling.</p>
+        `
+    },
+    {
+        category: "Data Structures",
+        question: "Give examples of data structures in C++.",
+        answer: `
+            <p>Common data structures include:</p>
+            <ul>
+                <li>Arrays</li>
+                <li>Stacks</li>
+                <li>Queues</li>
+                <li>Linked lists</li>
+                <li>Trees</li>
+                <li>Graphs</li>
+            </ul>
+            <p>The choice of data structure affects program performance. For example, stacks are useful in undo operations, while queues are useful for handling tasks in sequence.</p>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "What is a Database Management System, DBMS?",
+        answer: `
+            <p>A DBMS is software that manages how data is stored, organised, retrieved, and updated.</p>
+            <p>It acts as a connection between users and databases. In practice, DBMS keeps data organised and consistent. Banking systems, college systems, and booking systems commonly use DBMS.</p>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "What are the advantages of DBMS?",
+        answer: `
+            <p>A DBMS helps organisations manage data efficiently and securely.</p>
+            <ul>
+                <li>Improves data consistency</li>
+                <li>Reduces data duplication</li>
+                <li>Enhances data security</li>
+                <li>Makes data retrieval faster</li>
+                <li>Supports backup and recovery</li>
+                <li>Allows multiple users to access data at the same time</li>
+            </ul>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "What do you mean by Object-Relational DBMS?",
+        answer: `
+            <p>An Object-Relational DBMS, or ORDBMS, combines relational database features with object-oriented concepts.</p>
+            <p>It supports complex data structures and is useful in modern applications that need both relational tables and object-like data handling.</p>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "What is a database schema?",
+        answer: `
+            <p>A schema defines the structure of a database.</p>
+            <p>It includes tables, relationships, fields, data types, and constraints. A clear schema keeps data organised and easy to manage.</p>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "What are DDL and DML commands in SQL?",
+        answer: `
+            <p>DDL and DML are two important categories of SQL commands.</p>
+            <p><b>DDL, Data Definition Language:</b> Used to define or modify database structure. Examples include CREATE, ALTER, DROP, and TRUNCATE.</p>
+            <p><b>DML, Data Manipulation Language:</b> Used to work with actual data inside tables. Examples include INSERT, UPDATE, DELETE, and SELECT.</p>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "Differentiate between TRUNCATE and DELETE.",
+        answer: `
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>TRUNCATE</th>
+                    <th>DELETE</th>
+                </tr>
+                <tr>
+                    <td>Scope</td>
+                    <td>Removes all records from the table</td>
+                    <td>Can remove selected rows using conditions</td>
+                </tr>
+                <tr>
+                    <td>Command Type</td>
+                    <td>DDL</td>
+                    <td>DML</td>
+                </tr>
+                <tr>
+                    <td>Speed</td>
+                    <td>Faster</td>
+                    <td>Slower because rows are removed individually</td>
+                </tr>
+                <tr>
+                    <td>Use</td>
+                    <td>Used when the full table must be cleared</td>
+                    <td>Used when specific rows must be removed</td>
+                </tr>
+            </table>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "Why is indexing useful in SQL?",
+        answer: `
+            <p>Indexing improves the speed of data retrieval operations.</p>
+            <p>Without indexing, the database may scan the entire table row by row. With indexing, the database can locate records faster.</p>
+            <p>Indexing is useful for:</p>
+            <ul>
+                <li>Frequently searched columns</li>
+                <li>WHERE conditions</li>
+                <li>ORDER BY sorting</li>
+                <li>Joining multiple tables</li>
+                <li>Improving query performance in large databases</li>
+            </ul>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "What are Left Outer Join and Right Outer Join?",
+        answer: `
+            <p>Joins are used to combine data from multiple tables.</p>
+            <p><b>Left Outer Join:</b> Returns all records from the left table and matching records from the right table. If no match is found, NULL values are shown for the right table.</p>
+            <p><b>Right Outer Join:</b> Returns all records from the right table and matching records from the left table. If no match is found, NULL values are shown for the left table.</p>
+        `
+    },
+    {
+        category: "DBMS & SQL",
+        question: "What is a stored procedure?",
+        answer: `
+            <p>A stored procedure is a saved SQL query or group of SQL statements that can be reused.</p>
+            <p>It reduces repetition, improves efficiency, and helps maintain database logic in a structured way.</p>
+        `
+    },
+    {
+        category: "Networks & Testing",
+        question: "What is the difference between a session and a socket?",
+        answer: `
+            <p>A socket is a communication endpoint used for sending and receiving data between systems.</p>
+            <p>A session represents an ongoing interaction between two systems or between a user and an application.</p>
+            <p>In simple words, sockets support communication, while sessions maintain interaction state.</p>
+        `
+    },
+    {
+        category: "Networks & Testing",
+        question: "What is the difference between TCP and UDP?",
+        answer: `
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>TCP</th>
+                    <th>UDP</th>
+                </tr>
+                <tr>
+                    <td>Full Form</td>
+                    <td>Transmission Control Protocol</td>
+                    <td>User Datagram Protocol</td>
+                </tr>
+                <tr>
+                    <td>Reliability</td>
+                    <td>Reliable delivery</td>
+                    <td>Delivery is not guaranteed</td>
+                </tr>
+                <tr>
+                    <td>Speed</td>
+                    <td>Slower due to error checking</td>
+                    <td>Faster due to less checking</td>
+                </tr>
+                <tr>
+                    <td>Connection</td>
+                    <td>Connection-oriented</td>
+                    <td>Connectionless</td>
+                </tr>
+                <tr>
+                    <td>Examples</td>
+                    <td>Web browsing, email, file transfer</td>
+                    <td>Video streaming, gaming, live broadcasts</td>
+                </tr>
+            </table>
+        `
+    },
+    {
+        category: "Networks & Testing",
+        question: "What is SDLC?",
+        answer: `
+            <p>SDLC stands for Software Development Life Cycle.</p>
+            <p>It defines the stages involved in building software. Common stages include planning, requirement analysis, design, development, testing, deployment, and maintenance.</p>
+        `
+    },
+    {
+        category: "Networks & Testing",
+        question: "What is the difference between white-box and black-box testing?",
+        answer: `
+            <table>
+                <tr>
+                    <th>White-Box Testing</th>
+                    <th>Black-Box Testing</th>
+                </tr>
+                <tr>
+                    <td>Tester knows the internal code structure</td>
+                    <td>Tester does not need to know internal code</td>
+                </tr>
+                <tr>
+                    <td>Test cases are based on code logic</td>
+                    <td>Test cases are based on functionality</td>
+                </tr>
+                <tr>
+                    <td>Mainly performed by developers and testers</td>
+                    <td>Performed by testers, developers, and sometimes users</td>
+                </tr>
+                <tr>
+                    <td>Also called structural testing</td>
+                    <td>Also called functional testing</td>
+                </tr>
+            </table>
+            <p>Both testing methods are useful for improving software quality.</p>
+        `
+    },
+    {
+        category: "System Design",
+        question: "How would you design a scalable user login system for millions of users?",
+        answer: `
+            <p>A scalable login system should handle high traffic, fast response time, and strong security.</p>
+            <ul>
+                <li><b>API Layer:</b> Handles login requests.</li>
+                <li><b>Load Balancer:</b> Distributes traffic across servers.</li>
+                <li><b>Authentication Servers:</b> Verify users and process login.</li>
+                <li><b>Caching:</b> Store sessions or JWT data using Redis.</li>
+                <li><b>Database Optimisation:</b> Use indexing and replication.</li>
+                <li><b>Password Security:</b> Use hashing such as bcrypt or Argon2.</li>
+                <li><b>Rate Limiting:</b> Prevent brute-force attacks.</li>
+                <li><b>Monitoring:</b> Detect failures and unusual activity.</li>
+                <li><b>Failover:</b> Use backup servers for high availability.</li>
+            </ul>
+        `
+    },
+    {
+        category: "System Design",
+        question: "How do you ensure data consistency in a distributed microservices architecture?",
+        answer: `
+            <p>Data consistency is challenging in microservices because each service may manage its own database.</p>
+            <p>Many systems use <b>eventual consistency</b>, where data may take time to update everywhere but becomes correct after some time.</p>
+            <p>Useful methods include:</p>
+            <ul>
+                <li><b>Saga pattern:</b> Manages multi-step transactions and rollback actions.</li>
+                <li><b>Outbox pattern:</b> Sends reliable events through message queues.</li>
+                <li><b>Idempotency:</b> Ensures repeated messages do not create duplicate effects.</li>
+            </ul>
+        `
+    },
+    {
+        category: "System Design",
+        question: "What are the trade-offs between monolithic and microservices architectures?",
+        answer: `
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Monolithic</th>
+                    <th>Microservices</th>
+                </tr>
+                <tr>
+                    <td>Initial Setup</td>
+                    <td>Easier and faster to build</td>
+                    <td>More complex due to multiple services</td>
+                </tr>
+                <tr>
+                    <td>Scaling</td>
+                    <td>Difficult to scale one component separately</td>
+                    <td>Each service can be scaled independently</td>
+                </tr>
+                <tr>
+                    <td>Failure Impact</td>
+                    <td>One failure may affect the full application</td>
+                    <td>Failure in one service may not affect others</td>
+                </tr>
+                <tr>
+                    <td>Team Suitability</td>
+                    <td>Good for small teams and simple apps</td>
+                    <td>Good for large teams and complex apps</td>
+                </tr>
+            </table>
+        `
+    },
+    {
+        category: "HR Interview",
+        question: "Why do you want to join Infosys?",
+        answer: `
+            <p>I want to join Infosys because of its strong reputation in the IT industry and its focus on innovation, learning, and employee development.</p>
+            <p>The company provides opportunities to work on diverse projects and improve both technical and professional skills. I also appreciate Infosys’s global work culture and structured training programs for freshers.</p>
+        `
+    },
+    {
+        category: "HR Interview",
+        question: "Tell me about yourself.",
+        answer: `
+            <p>I am a motivated learner with a strong interest in technology and problem-solving. I have built my foundation in programming, database concepts, and software development basics.</p>
+            <p>Apart from academics, I enjoy explaining technical concepts to others, which has helped me improve my communication and confidence. I am looking forward to starting my career in an organisation where I can learn, contribute, and grow.</p>
+        `
+    },
+    {
+        category: "HR Interview",
+        question: "What are your strengths and weaknesses?",
+        answer: `
+            <p>One of my strengths is adaptability. I can quickly learn new technologies and adjust to changing work environments. I also work well in teams and stay calm during challenging situations.</p>
+            <p>As for weakness, I sometimes spend extra time reviewing my work to avoid mistakes. However, I am improving my time management by setting deadlines and prioritising tasks better.</p>
+        `
+    },
+    {
+        category: "HR Interview",
+        question: "Do you have any questions for us?",
+        answer: `
+            <p>Yes, I would like to know more about the learning opportunities and training programs available for freshers.</p>
+            <p>I would also like to understand how teams usually collaborate on projects and what skills the company expects employees to improve during the initial years.</p>
+        `
+    },
+    {
+        category: "HR Interview",
+        question: "Are you comfortable working night shifts?",
+        answer: `
+            <p>Yes, I am comfortable working night shifts if the role requires it.</p>
+            <p>I understand that IT projects often involve global teams and different time zones. I am flexible with work schedules and focused on contributing effectively to the team and project goals.</p>
+        `
+    },
+    {
+        category: "HR Interview",
+        question: "Why should we hire you?",
+        answer: `
+            <p>You should hire me because I have a strong understanding of technical fundamentals along with good communication and problem-solving skills.</p>
+            <p>I am eager to learn, adaptable to new environments, and committed to contributing positively to the organisation and team projects.</p>
+        `
+    },
+
+    {
+        category: "TCS NQT-style",
+        question: "Tell us about yourself.",
+        answer: `
+            <p>This is usually the opening question in many interviews. Keep your answer short, structured, and confident.</p>
+            <p><b>Sample Answer:</b></p>
+            <p>I am a recent graduate in [mention your degree]. During my studies, I developed interest in [software development / data analysis / web development / embedded systems]. I have completed projects related to [mention your skills or tools]. I am eager to begin my career in an organisation where I can learn, contribute, and grow professionally.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "Why do you want to work for TCS?",
+        answer: `
+            <p>This question checks whether the candidate understands the company and has a clear reason for applying.</p>
+            <p><b>Sample Answer:</b></p>
+            <p>I want to work for TCS because it is one of the leading IT service companies with a strong global presence, learning culture, and opportunities to work on real-world projects. I believe TCS can help me improve my technical and professional skills while allowing me to contribute to meaningful technology solutions.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What are your strengths and weaknesses?",
+        answer: `
+            <p>This question checks self-awareness and honesty.</p>
+            <p><b>Strength Sample:</b></p>
+            <p>One of my strengths is problem-solving. I try to understand the problem clearly and break it into smaller parts before finding a solution. I also communicate well with team members.</p>
+            <p><b>Weakness Sample:</b></p>
+            <p>Sometimes I spend extra time checking small details to avoid mistakes. I am improving this by setting time limits and prioritising important tasks first.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "Explain your final year project.",
+        answer: `
+            <p>This question checks technical understanding, project clarity, and communication skills.</p>
+            <p><b>Good Answer Structure:</b></p>
+            <ul>
+                <li>Project title</li>
+                <li>Problem you tried to solve</li>
+                <li>Technologies used</li>
+                <li>Your role in the project</li>
+                <li>Major features</li>
+                <li>Challenges faced</li>
+                <li>What you learned</li>
+            </ul>
+            <p><b>Sample Answer:</b></p>
+            <p>My final year project was [project name]. It was developed using [technologies]. The main objective was to [mention purpose]. I worked on [your role]. Through this project, I improved my understanding of problem-solving, debugging, teamwork, and practical implementation.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What is your approach to problem solving?",
+        answer: `
+            <p>A good answer should show logical thinking.</p>
+            <p><b>Sample Answer:</b></p>
+            <p>When I approach a problem, I first try to understand the requirement clearly. Then I break the problem into smaller parts. After that, I think of possible solutions, choose the most suitable one, implement it, and test it. If needed, I take feedback and improve the solution.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "How do you handle stress and pressure?",
+        answer: `
+            <p>This question checks maturity and workplace readiness.</p>
+            <p><b>Sample Answer:</b></p>
+            <p>I handle stress by staying organised and prioritising tasks. I focus on one task at a time and try to complete urgent work first. I also maintain clear communication with my team so that problems can be solved quickly. I believe calm thinking helps in handling pressure effectively.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What is recursion?",
+        answer: `
+            <p>Recursion is a programming technique where a function calls itself until a base condition is reached.</p>
+            <p>It is useful for solving problems that can be divided into smaller similar subproblems.</p>
+            <p><b>Examples:</b> Factorial calculation, tree traversal, and some searching problems can be solved using recursion.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What is the difference between HTTP and HTTPS?",
+        answer: `
+            <table>
+                <tr>
+                    <th>HTTP</th>
+                    <th>HTTPS</th>
+                </tr>
+                <tr>
+                    <td>HTTP stands for HyperText Transfer Protocol.</td>
+                    <td>HTTPS stands for HyperText Transfer Protocol Secure.</td>
+                </tr>
+                <tr>
+                    <td>It transfers data without encryption.</td>
+                    <td>It transfers data using SSL/TLS encryption.</td>
+                </tr>
+                <tr>
+                    <td>Less secure.</td>
+                    <td>More secure.</td>
+                </tr>
+                <tr>
+                    <td>Not suitable for sensitive data.</td>
+                    <td>Suitable for login, payment, and confidential data.</td>
+                </tr>
+            </table>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What is an Operating System?",
+        answer: `
+            <p>An Operating System is system software that manages computer hardware and software resources.</p>
+            <p>It acts as an interface between the user and the computer system.</p>
+            <p>Important functions of an operating system include:</p>
+            <ul>
+                <li>Memory management</li>
+                <li>Process management</li>
+                <li>File management</li>
+                <li>Device management</li>
+                <li>User interface management</li>
+            </ul>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What is time complexity?",
+        answer: `
+            <p>Time complexity describes how the running time of an algorithm increases as the input size increases.</p>
+            <p>It helps us compare algorithms and choose efficient solutions.</p>
+            <p>It is commonly represented using Big-O notation.</p>
+            <ul>
+                <li><b>O(1):</b> Constant time</li>
+                <li><b>O(n):</b> Linear time</li>
+                <li><b>O(log n):</b> Logarithmic time</li>
+                <li><b>O(n²):</b> Quadratic time</li>
+            </ul>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What is a pointer?",
+        answer: `
+            <p>A pointer is a variable that stores the memory address of another variable.</p>
+            <p>Pointers are mainly used in C and C++ for memory management, array handling, dynamic memory allocation, and data structures such as linked lists.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What is SQL JOIN?",
+        answer: `
+            <p>SQL JOIN is used to combine rows from two or more tables based on a related column.</p>
+            <p>It helps retrieve meaningful data from multiple tables in a single query.</p>
+            <p>Common types of joins include:</p>
+            <ul>
+                <li>INNER JOIN</li>
+                <li>LEFT JOIN</li>
+                <li>RIGHT JOIN</li>
+                <li>FULL JOIN</li>
+            </ul>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What is cloud computing?",
+        answer: `
+            <p>Cloud computing is the delivery of computing services such as servers, storage, databases, networking, and software over the internet.</p>
+            <p>It helps companies scale easily without maintaining large physical infrastructure.</p>
+            <p><b>Examples:</b> AWS, Microsoft Azure, and Google Cloud Platform.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "Why do you want to join TCS?",
+        answer: `
+            <p>This HR question evaluates motivation and company fit.</p>
+            <p><b>Sample Answer:</b></p>
+            <p>I want to join TCS because it provides a strong learning environment, exposure to global projects, and long-term career growth. I believe it is the right platform to build my skills and contribute to meaningful projects.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "Where do you see yourself in 5 years?",
+        answer: `
+            <p>This question checks career vision and commitment.</p>
+            <p><b>Sample Answer:</b></p>
+            <p>In the next five years, I see myself as a skilled professional with strong technical knowledge and practical project experience. I want to contribute to important projects, take more responsibilities, and continue learning new technologies to grow with the organisation.</p>
+        `
+    },
+    {
+        category: "TCS NQT-style",
+        question: "What are some tips for cracking a TCS NQT-style interview?",
+        answer: `
+            <p>Useful preparation tips include:</p>
+            <ul>
+                <li>Prepare a clear self-introduction.</li>
+                <li>Revise programming basics.</li>
+                <li>Understand your final year project well.</li>
+                <li>Practise common HR questions.</li>
+                <li>Revise DBMS, OOPs, OS, CN, and SQL basics.</li>
+                <li>Speak clearly and avoid memorised answers.</li>
+                <li>Be honest if you do not know an answer.</li>
+                <li>Show interest in learning and teamwork.</li>
+            </ul>
+        `
+    },
+    {
+        category: "Interview Tips",
+        question: "What does the Infosys interview process usually include?",
+        answer: `
+            <p>The Infosys interview process usually includes an aptitude round, technical interview, and HR discussion. In some roles, coding or system-based assessments may also be included.</p>
+            <table>
+                <tr>
+                    <th>Interview Stage</th>
+                    <th>What Is Evaluated</th>
+                </tr>
+                <tr>
+                    <td>Aptitude Round</td>
+                    <td>Logical reasoning, quantitative ability, and verbal skills</td>
+                </tr>
+                <tr>
+                    <td>Technical Interview</td>
+                    <td>Programming basics, problem-solving, and project understanding</td>
+                </tr>
+                <tr>
+                    <td>Coding Round</td>
+                    <td>Coding logic, optimisation, and debugging approach</td>
+                </tr>
+                <tr>
+                    <td>HR Interview</td>
+                    <td>Communication, attitude, teamwork, and career goals</td>
+                </tr>
+            </table>
+        `
+    },
+    {
+        category: "Interview Tips",
+        question: "What do interviewers usually evaluate?",
+        answer: `
+            <p>Interviewers usually evaluate more than direct answers. They observe how clearly the candidate thinks and explains concepts.</p>
+            <ul>
+                <li>Understanding of technical fundamentals</li>
+                <li>Logical and analytical thinking</li>
+                <li>Communication clarity</li>
+                <li>Problem-solving approach</li>
+                <li>Project knowledge</li>
+                <li>Confidence</li>
+                <li>Teamwork ability</li>
+                <li>Learning attitude and adaptability</li>
+            </ul>
+        `
+    },
+    {
+        category: "Interview Tips",
+        question: "What common mistakes do candidates make in interviews?",
+        answer: `
+            <p>Common mistakes include:</p>
+            <ul>
+                <li>Giving memorised answers without understanding</li>
+                <li>Ignoring basic concepts</li>
+                <li>Speaking too quickly</li>
+                <li>Explaining projects weakly</li>
+                <li>Not practising communication</li>
+                <li>Guessing answers aggressively</li>
+                <li>Focusing only on advanced topics and ignoring fundamentals</li>
+            </ul>
+            <p>It is better to answer calmly and honestly than to force an incorrect answer.</p>
+        `
+    }
+    ,
+    {
+        category: "OOPs",
+        question: "What is object-oriented programming?",
+        answer: `
+            <p>Object-oriented programming, or OOP, is a programming approach based on objects and classes.</p>
+            <p>It helps organise code by combining data and behaviour together. The main concepts are class, object, inheritance, polymorphism, abstraction, and encapsulation.</p>
+        `
+    },
+    {
+        category: "OOPs",
+        question: "What is the difference between class and object?",
+        answer: `
+            <p>A class is a blueprint or template. An object is an instance created from that class.</p>
+            <p>For example, <b>Car</b> can be a class, while <b>myCar</b> is an object with specific values such as colour, model, and speed.</p>
+        `
+    },
+    {
+        category: "OOPs",
+        question: "What is encapsulation?",
+        answer: `
+            <p>Encapsulation means wrapping data and methods together inside a class.</p>
+            <p>It also restricts direct access to data using access modifiers like private, public, and protected. This improves security and code maintainability.</p>
+        `
+    },
+    {
+        category: "OOPs",
+        question: "What is inheritance?",
+        answer: `
+            <p>Inheritance allows one class to acquire the properties and methods of another class.</p>
+            <p>It promotes code reuse. For example, a <b>Car</b> class can inherit common features from a <b>Vehicle</b> class.</p>
+        `
+    },
+    {
+        category: "OOPs",
+        question: "What is polymorphism?",
+        answer: `
+            <p>Polymorphism means one name having many forms.</p>
+            <p>In programming, it allows the same function or method name to behave differently depending on the object or arguments. Method overloading and method overriding are common examples.</p>
+        `
+    },
+    {
+        category: "OOPs",
+        question: "What is abstraction?",
+        answer: `
+            <p>Abstraction means showing only essential details and hiding unnecessary internal implementation.</p>
+            <p>For example, when we use an ATM, we only see options like withdraw and check balance. The internal banking process is hidden from the user.</p>
+        `
+    },
+    {
+        category: "Python",
+        question: "Why is Python popular among beginners?",
+        answer: `
+            <p>Python is popular because its syntax is simple and close to English.</p>
+            <p>It is widely used in web development, automation, data science, AI, machine learning, and scripting. It also has many useful libraries.</p>
+        `
+    },
+    {
+        category: "Python",
+        question: "What is the difference between list and tuple in Python?",
+        answer: `
+            <table>
+                <tr><th>List</th><th>Tuple</th></tr>
+                <tr><td>Mutable</td><td>Immutable</td></tr>
+                <tr><td>Uses square brackets []</td><td>Uses parentheses ()</td></tr>
+                <tr><td>Can be changed after creation</td><td>Cannot be changed after creation</td></tr>
+            </table>
+        `
+    },
+    {
+        category: "Python",
+        question: "What is a dictionary in Python?",
+        answer: `
+            <p>A dictionary is a collection of key-value pairs.</p>
+            <p>It is useful when data must be accessed using meaningful keys. Example: <b>{ name: "Anu", age: 21 }</b>.</p>
+        `
+    },
+    {
+        category: "Python",
+        question: "What is the use of indentation in Python?",
+        answer: `
+            <p>Indentation is used to define blocks of code in Python.</p>
+            <p>Unlike many languages that use braces, Python uses indentation to identify code inside loops, functions, classes, and conditional statements.</p>
+        `
+    },
+    {
+        category: "Python",
+        question: "What is a Python function?",
+        answer: `
+            <p>A function is a reusable block of code that performs a specific task.</p>
+            <p>Functions help reduce repetition and make programs easier to understand, test, and maintain.</p>
+        `
+    },
+    {
+        category: "Python",
+        question: "What is exception handling in Python?",
+        answer: `
+            <p>Exception handling is used to handle runtime errors without stopping the entire program unexpectedly.</p>
+            <p>Python uses <b>try</b>, <b>except</b>, <b>finally</b>, and <b>else</b> blocks for exception handling.</p>
+        `
+    },
+    {
+        category: "Java",
+        question: "Why is Java platform independent?",
+        answer: `
+            <p>Java is platform independent because Java code is compiled into bytecode.</p>
+            <p>This bytecode can run on any system that has the Java Virtual Machine, JVM. This is why Java follows the idea: write once, run anywhere.</p>
+        `
+    },
+    {
+        category: "Java",
+        question: "What is JVM?",
+        answer: `
+            <p>JVM stands for Java Virtual Machine.</p>
+            <p>It executes Java bytecode and provides runtime support such as memory management, security, and garbage collection.</p>
+        `
+    },
+    {
+        category: "Java",
+        question: "What is the difference between JDK, JRE, and JVM?",
+        answer: `
+            <p><b>JVM:</b> Runs Java bytecode.</p>
+            <p><b>JRE:</b> Provides the environment to run Java programs.</p>
+            <p><b>JDK:</b> Provides tools to develop and run Java programs. It includes JRE and development tools.</p>
+        `
+    },
+    {
+        category: "Java",
+        question: "What is method overloading in Java?",
+        answer: `
+            <p>Method overloading means having multiple methods with the same name but different parameters in the same class.</p>
+            <p>It improves readability and supports compile-time polymorphism.</p>
+        `
+    },
+    {
+        category: "Java",
+        question: "What is method overriding in Java?",
+        answer: `
+            <p>Method overriding occurs when a child class provides its own implementation of a method already defined in the parent class.</p>
+            <p>It supports runtime polymorphism.</p>
+        `
+    },
+    {
+        category: "Operating System",
+        question: "What is a process?",
+        answer: `
+            <p>A process is a program in execution.</p>
+            <p>It has its own memory space, program counter, registers, and resources. Examples include a running browser, editor, or application.</p>
+        `
+    },
+    {
+        category: "Operating System",
+        question: "What is the difference between process and thread?",
+        answer: `
+            <table>
+                <tr><th>Process</th><th>Thread</th></tr>
+                <tr><td>Independent program in execution</td><td>Smallest unit of a process</td></tr>
+                <tr><td>Has separate memory</td><td>Shares memory with other threads of the same process</td></tr>
+                <tr><td>More overhead</td><td>Less overhead</td></tr>
+            </table>
+        `
+    },
+    {
+        category: "Operating System",
+        question: "What is deadlock?",
+        answer: `
+            <p>Deadlock is a situation where two or more processes wait for each other forever and none of them can continue execution.</p>
+            <p>It usually occurs when resources are locked and each process is waiting for a resource held by another process.</p>
+        `
+    },
+    {
+        category: "Operating System",
+        question: "What is virtual memory?",
+        answer: `
+            <p>Virtual memory is a memory management technique where the system uses part of secondary storage as if it were main memory.</p>
+            <p>It allows large programs to run even when physical RAM is limited.</p>
+        `
+    },
+    {
+        category: "Operating System",
+        question: "What is context switching?",
+        answer: `
+            <p>Context switching is the process of saving the state of one process and loading the state of another process.</p>
+            <p>It allows multitasking, but too many context switches can reduce performance.</p>
+        `
+    },
+    {
+        category: "Aptitude & Reasoning",
+        question: "How should you approach aptitude questions in an interview preparation test?",
+        answer: `
+            <p>First identify the type of question: percentage, ratio, time and work, probability, logical reasoning, or series.</p>
+            <p>Then write down the given data, choose the shortest formula or logic, solve step by step, and check whether the answer is reasonable.</p>
+        `
+    },
+    {
+        category: "Aptitude & Reasoning",
+        question: "What is a percentage?",
+        answer: `
+            <p>A percentage represents a value out of 100.</p>
+            <p>For example, 25% means 25 out of 100. Percentages are commonly used in profit and loss, marks, discounts, and data interpretation.</p>
+        `
+    },
+    {
+        category: "Aptitude & Reasoning",
+        question: "What is the basic formula for simple interest?",
+        answer: `
+            <p>The formula for simple interest is:</p>
+            <p><b>SI = (P × R × T) / 100</b></p>
+            <p>Here, P is principal amount, R is rate of interest, and T is time.</p>
+        `
+    },
+    {
+        category: "Aptitude & Reasoning",
+        question: "How do you solve number series questions?",
+        answer: `
+            <p>Look for patterns such as addition, subtraction, multiplication, division, squares, cubes, alternate terms, or prime numbers.</p>
+            <p>Do not guess immediately. Compare differences between consecutive terms first.</p>
+        `
+    },
+    {
+        category: "Infosys-style",
+        question: "How should you answer technical questions when you only know part of the answer?",
+        answer: `
+            <p>Answer honestly and explain what you know clearly.</p>
+            <p>You can say: <b>I am familiar with the basic idea, but I may not know the complete implementation. My understanding is...</b></p>
+            <p>This sounds more professional than guessing confidently.</p>
+        `
+    },
+    {
+        category: "Infosys-style",
+        question: "Why is communication important in service-based company interviews?",
+        answer: `
+            <p>Service-based companies work with clients, teams, and business requirements.</p>
+            <p>So interviewers check whether the candidate can explain ideas clearly, listen carefully, and communicate professionally.</p>
+        `
+    },
+    {
+        category: "Infosys-style",
+        question: "How do you explain a project effectively in an Infosys-style interview?",
+        answer: `
+            <p>Use this structure: problem, objective, technology used, your role, features, challenges, result, and learning.</p>
+            <p>Keep it simple and avoid exaggerating. Be ready for follow-up questions from your own project.</p>
+        `
+    },
+    {
+        category: "Wipro-style",
+        question: "Are you willing to relocate?",
+        answer: `
+            <p>A good answer should show flexibility while remaining genuine.</p>
+            <p><b>Sample Answer:</b> Yes, I am open to relocation if the role requires it. I see it as an opportunity to learn, adapt to a new environment, and contribute to the organisation effectively.</p>
+        `
+    },
+    {
+        category: "Wipro-style",
+        question: "What motivates you to work in the IT industry?",
+        answer: `
+            <p>I am motivated by the opportunity to solve real-world problems using technology.</p>
+            <p>The IT industry also provides continuous learning, teamwork, innovation, and exposure to different domains.</p>
+        `
+    },
+    {
+        category: "Wipro-style",
+        question: "How do you handle feedback?",
+        answer: `
+            <p>I take feedback positively because it helps me improve.</p>
+            <p>I first listen carefully, understand the area of improvement, and then work on it with a clear plan.</p>
+        `
+    },
+    {
+        category: "Cognizant-style",
+        question: "What is the difference between confidence and overconfidence in an interview?",
+        answer: `
+            <p>Confidence means explaining what you know clearly and calmly.</p>
+            <p>Overconfidence means pretending to know everything or ignoring corrections. Interviewers usually prefer honest confidence.</p>
+        `
+    },
+    {
+        category: "Cognizant-style",
+        question: "How do you work in a team when there is disagreement?",
+        answer: `
+            <p>I would listen to the other person’s point of view first and then explain my idea clearly.</p>
+            <p>If needed, I would compare options based on facts, project goals, and team benefit instead of personal opinion.</p>
+        `
+    },
+    {
+        category: "Cognizant-style",
+        question: "What does professionalism mean to you?",
+        answer: `
+            <p>Professionalism means being responsible, respectful, punctual, honest, and committed to quality work.</p>
+            <p>It also means communicating clearly and handling challenges calmly.</p>
+        `
+    }
+
+];
+
+let filteredQuestions = [...questions];
+let currentIndex = 0;
+let viewedCards = 0;
+let writtenAnswers = {};
+
+function loadQuestion() {
+    if (filteredQuestions.length === 0) {
+        document.getElementById("categoryBadge").innerText = "No Category";
+        document.getElementById("questionCount").innerText = "No questions found";
+        document.getElementById("questionTitle").innerText = "No matching question found.";
+        document.getElementById("answerText").innerHTML = "";
+        document.getElementById("answerBox").style.display = "none";
+        return;
+    }
+
+    const q = filteredQuestions[currentIndex];
+
+    document.getElementById("categoryBadge").innerText = q.category;
+    document.getElementById("questionCount").innerText =
+        `Question ${currentIndex + 1} of ${filteredQuestions.length}`;
+
+    document.getElementById("questionTitle").innerText = q.question;
+    document.getElementById("answerText").innerHTML = q.answer;
+    document.getElementById("answerBox").style.display = "none";
+    document.getElementById("compareBox").style.display = "none";
+    document.getElementById("studentAnswer").value = writtenAnswers[getQuestionKey(q)] || "";
+
+    document.getElementById("totalCount").innerText = questions.length;
+    document.getElementById("categoryCount").innerText = filteredQuestions.length;
+    document.getElementById("viewedCount").innerText = viewedCards;
+
+    renderQuestionGrid();
+}
+
+function getQuestionKey(q) {
+    return q.category + "::" + q.question;
+}
+
+function saveStudentAnswer() {
+    if (filteredQuestions.length === 0) return;
+    const q = filteredQuestions[currentIndex];
+    writtenAnswers[getQuestionKey(q)] = document.getElementById("studentAnswer").value.trim();
+}
+
+function clearStudentAnswer() {
+    if (filteredQuestions.length === 0) return;
+    const q = filteredQuestions[currentIndex];
+    document.getElementById("studentAnswer").value = "";
+    delete writtenAnswers[getQuestionKey(q)];
+    document.getElementById("compareBox").style.display = "none";
+}
+
+function showAnswer() {
+    if (filteredQuestions.length === 0) return;
+    saveStudentAnswer();
+    const q = filteredQuestions[currentIndex];
+    const myAnswer = writtenAnswers[getQuestionKey(q)] || "";
+
+    document.getElementById("answerBox").style.display = "block";
+    document.getElementById("myAnswerText").innerText = myAnswer || "You have not written an answer yet.";
+    document.getElementById("compareBox").style.display = "block";
+
+    viewedCards++;
+    document.getElementById("viewedCount").innerText = viewedCards;
+}
+
+function nextQuestion() {
+    if (filteredQuestions.length === 0) return;
+
+    currentIndex++;
+
+    if (currentIndex >= filteredQuestions.length) {
+        currentIndex = 0;
+    }
+
+    loadQuestion();
+}
+
+function previousQuestion() {
+    if (filteredQuestions.length === 0) return;
+
+    currentIndex--;
+
+    if (currentIndex < 0) {
+        currentIndex = filteredQuestions.length - 1;
+    }
+
+    loadQuestion();
+}
+
+function randomQuestion() {
+    if (filteredQuestions.length === 0) return;
+
+    currentIndex = Math.floor(Math.random() * filteredQuestions.length);
+    loadQuestion();
+}
+
+function filterQuestions() {
+    const selectedCategory = document.getElementById("categoryFilter").value;
+    const searchText = document.getElementById("searchInput").value.toLowerCase();
+
+    filteredQuestions = questions.filter(q => {
+        const categoryMatch =
+            selectedCategory === "All" || q.category === selectedCategory;
+
+        const searchMatch =
+            q.question.toLowerCase().includes(searchText) ||
+            q.category.toLowerCase().includes(searchText) ||
+            q.answer.toLowerCase().includes(searchText);
+
+        return categoryMatch && searchMatch;
+    });
+
+    currentIndex = 0;
+    loadQuestion();
+}
+
+function renderQuestionGrid() {
+    const grid = document.getElementById("questionGrid");
+    grid.innerHTML = "";
+
+    filteredQuestions.forEach((q, index) => {
+        const card = document.createElement("div");
+        card.className = "question-mini-card";
+
+        card.innerHTML = `
+            <span>${q.category}</span>
+            <h4>${q.question}</h4>
+        `;
+
+        card.onclick = function() {
+            currentIndex = index;
+            loadQuestion();
+            window.scrollTo({
+                top: document.querySelector(".flashcard").offsetTop - 100,
+                behavior: "smooth"
+            });
+        };
+
+        grid.appendChild(card);
+    });
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
