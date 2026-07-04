@@ -185,6 +185,19 @@ input:focus {
     margin-bottom: 18px;
 }
 
+.badge-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.difficulty-badge {
+    background: rgba(255,255,255,0.06);
+    color: #f4f4f4;
+    border-color: rgba(255,255,255,0.16);
+}
+
 .question-count {
     color: #aaa;
     font-size: 14px;
@@ -667,7 +680,6 @@ button:hover,
 
     <div>
         <a href="index.html">Home</a>
-        <a href="#benefits">Benefits</a>
         <a href="practice.html">Practice</a>
         <a href="book.html">Book</a>
     </div>
@@ -690,8 +702,9 @@ button:hover,
             <h2>Practice Before Your Interview</h2>
             <p>
                 These are company-style preparation questions for freshers and placement candidates.
-                They cover programming basics, C/C++, OOPs, Python, Java, OS, DBMS, SQL, networks,
+                They cover programming basics, C/C++, OOPs, Python, Java, AI/ML, OS, DBMS, SQL, networks,
                 testing, system design, aptitude, HR, and company-style interview practice.
+                Filter by category and difficulty to revise smarter.
             </p>
 
             <div class="controls">
@@ -702,6 +715,7 @@ button:hover,
                     <option value="OOPs">OOPs</option>
                     <option value="Python">Python</option>
                     <option value="Java">Java</option>
+                    <option value="AI/ML">AI/ML</option>
                     <option value="Operating System">Operating System</option>
                     <option value="Aptitude & Reasoning">Aptitude & Reasoning</option>
                     <option value="DBMS & SQL">DBMS & SQL</option>
@@ -713,6 +727,13 @@ button:hover,
                     <option value="Wipro-style">Wipro-style</option>
                     <option value="Cognizant-style">Cognizant-style</option>
                     <option value="Interview Tips">Interview Tips</option>
+                </select>
+
+                <select id="difficultyFilter" onchange="filterQuestions()">
+                    <option value="All">All Difficulties</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
                 </select>
 
                 <input
@@ -727,7 +748,10 @@ button:hover,
         <div class="flash-layout">
 
             <div class="flashcard">
-                <div class="badge" id="categoryBadge">Category</div>
+                <div class="badge-row">
+                    <div class="badge" id="categoryBadge">Category</div>
+                    <div class="badge difficulty-badge" id="difficultyBadge">Difficulty</div>
+                </div>
                 <div class="question-count" id="questionCount">Question 1 of 1</div>
 
                 <h2 class="question-title" id="questionTitle">
@@ -777,7 +801,7 @@ button:hover,
 
                 <div class="stat">
                     <b id="categoryCount">0</b>
-                    <p>Questions in selected category</p>
+                    <p>Questions after filters</p>
                 </div>
 
                 <div class="stat">
@@ -808,24 +832,24 @@ button:hover,
 
 <script>
 const questions = [
-    {
-        category: "C/C++",
+    {        category: "C/C++",
+        difficulty: "Easy",
         question: "What is the use of return 0?",
         answer: `
             <p><b>return 0</b> indicates that the program has executed successfully.</p>
             <p>It is a standard convention in C and C++ programs. When the main function returns 0, it tells the operating system that the program ended without errors.</p>
         `
     },
-    {
-        category: "C/C++",
+    {        category: "C/C++",
+        difficulty: "Medium",
         question: "Explain pointers in C++.",
         answer: `
             <p>Pointers are variables that store the memory address of another variable.</p>
             <p>They allow direct access to data stored in memory. Pointers are useful when working with large data because the program can work with references instead of copying values.</p>
         `
     },
-    {
-        category: "C/C++",
+    {        category: "C/C++",
+        difficulty: "Hard",
         question: "What is the difference between an array and a pointer?",
         answer: `
             <p>An array stores multiple values of the same data type in continuous memory locations.</p>
@@ -833,8 +857,8 @@ const questions = [
             <p>Arrays are simple and fixed in structure, while pointers are more flexible but require careful handling.</p>
         `
     },
-    {
-        category: "Data Structures",
+    {        category: "Data Structures",
+        difficulty: "Easy",
         question: "Give examples of data structures in C++.",
         answer: `
             <p>Common data structures include:</p>
@@ -849,16 +873,16 @@ const questions = [
             <p>The choice of data structure affects program performance. For example, stacks are useful in undo operations, while queues are useful for handling tasks in sequence.</p>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Easy",
         question: "What is a Database Management System, DBMS?",
         answer: `
             <p>A DBMS is software that manages how data is stored, organised, retrieved, and updated.</p>
             <p>It acts as a connection between users and databases. In practice, DBMS keeps data organised and consistent. Banking systems, college systems, and booking systems commonly use DBMS.</p>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Easy",
         question: "What are the advantages of DBMS?",
         answer: `
             <p>A DBMS helps organisations manage data efficiently and securely.</p>
@@ -872,24 +896,24 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Medium",
         question: "What do you mean by Object-Relational DBMS?",
         answer: `
             <p>An Object-Relational DBMS, or ORDBMS, combines relational database features with object-oriented concepts.</p>
             <p>It supports complex data structures and is useful in modern applications that need both relational tables and object-like data handling.</p>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Easy",
         question: "What is a database schema?",
         answer: `
             <p>A schema defines the structure of a database.</p>
             <p>It includes tables, relationships, fields, data types, and constraints. A clear schema keeps data organised and easy to manage.</p>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Easy",
         question: "What are DDL and DML commands in SQL?",
         answer: `
             <p>DDL and DML are two important categories of SQL commands.</p>
@@ -897,8 +921,8 @@ const questions = [
             <p><b>DML, Data Manipulation Language:</b> Used to work with actual data inside tables. Examples include INSERT, UPDATE, DELETE, and SELECT.</p>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Medium",
         question: "Differentiate between TRUNCATE and DELETE.",
         answer: `
             <table>
@@ -930,8 +954,8 @@ const questions = [
             </table>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Medium",
         question: "Why is indexing useful in SQL?",
         answer: `
             <p>Indexing improves the speed of data retrieval operations.</p>
@@ -946,8 +970,8 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Medium",
         question: "What are Left Outer Join and Right Outer Join?",
         answer: `
             <p>Joins are used to combine data from multiple tables.</p>
@@ -955,16 +979,16 @@ const questions = [
             <p><b>Right Outer Join:</b> Returns all records from the right table and matching records from the left table. If no match is found, NULL values are shown for the left table.</p>
         `
     },
-    {
-        category: "DBMS & SQL",
+    {        category: "DBMS & SQL",
+        difficulty: "Hard",
         question: "What is a stored procedure?",
         answer: `
             <p>A stored procedure is a saved SQL query or group of SQL statements that can be reused.</p>
             <p>It reduces repetition, improves efficiency, and helps maintain database logic in a structured way.</p>
         `
     },
-    {
-        category: "Networks & Testing",
+    {        category: "Networks & Testing",
+        difficulty: "Medium",
         question: "What is the difference between a session and a socket?",
         answer: `
             <p>A socket is a communication endpoint used for sending and receiving data between systems.</p>
@@ -972,8 +996,8 @@ const questions = [
             <p>In simple words, sockets support communication, while sessions maintain interaction state.</p>
         `
     },
-    {
-        category: "Networks & Testing",
+    {        category: "Networks & Testing",
+        difficulty: "Easy",
         question: "What is the difference between TCP and UDP?",
         answer: `
             <table>
@@ -1010,16 +1034,16 @@ const questions = [
             </table>
         `
     },
-    {
-        category: "Networks & Testing",
+    {        category: "Networks & Testing",
+        difficulty: "Easy",
         question: "What is SDLC?",
         answer: `
             <p>SDLC stands for Software Development Life Cycle.</p>
             <p>It defines the stages involved in building software. Common stages include planning, requirement analysis, design, development, testing, deployment, and maintenance.</p>
         `
     },
-    {
-        category: "Networks & Testing",
+    {        category: "Networks & Testing",
+        difficulty: "Medium",
         question: "What is the difference between white-box and black-box testing?",
         answer: `
             <table>
@@ -1047,8 +1071,8 @@ const questions = [
             <p>Both testing methods are useful for improving software quality.</p>
         `
     },
-    {
-        category: "System Design",
+    {        category: "System Design",
+        difficulty: "Hard",
         question: "How would you design a scalable user login system for millions of users?",
         answer: `
             <p>A scalable login system should handle high traffic, fast response time, and strong security.</p>
@@ -1065,8 +1089,8 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "System Design",
+    {        category: "System Design",
+        difficulty: "Hard",
         question: "How do you ensure data consistency in a distributed microservices architecture?",
         answer: `
             <p>Data consistency is challenging in microservices because each service may manage its own database.</p>
@@ -1079,8 +1103,8 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "System Design",
+    {        category: "System Design",
+        difficulty: "Medium",
         question: "What are the trade-offs between monolithic and microservices architectures?",
         answer: `
             <table>
@@ -1112,57 +1136,56 @@ const questions = [
             </table>
         `
     },
-    {
-        category: "HR Interview",
+    {        category: "HR Interview",
+        difficulty: "Easy",
         question: "Why do you want to join Infosys?",
         answer: `
             <p>I want to join Infosys because of its strong reputation in the IT industry and its focus on innovation, learning, and employee development.</p>
             <p>The company provides opportunities to work on diverse projects and improve both technical and professional skills. I also appreciate Infosys’s global work culture and structured training programs for freshers.</p>
         `
     },
-    {
-        category: "HR Interview",
+    {        category: "HR Interview",
+        difficulty: "Easy",
         question: "Tell me about yourself.",
         answer: `
             <p>I am a motivated learner with a strong interest in technology and problem-solving. I have built my foundation in programming, database concepts, and software development basics.</p>
             <p>Apart from academics, I enjoy explaining technical concepts to others, which has helped me improve my communication and confidence. I am looking forward to starting my career in an organisation where I can learn, contribute, and grow.</p>
         `
     },
-    {
-        category: "HR Interview",
+    {        category: "HR Interview",
+        difficulty: "Medium",
         question: "What are your strengths and weaknesses?",
         answer: `
             <p>One of my strengths is adaptability. I can quickly learn new technologies and adjust to changing work environments. I also work well in teams and stay calm during challenging situations.</p>
             <p>As for weakness, I sometimes spend extra time reviewing my work to avoid mistakes. However, I am improving my time management by setting deadlines and prioritising tasks better.</p>
         `
     },
-    {
-        category: "HR Interview",
+    {        category: "HR Interview",
+        difficulty: "Easy",
         question: "Do you have any questions for us?",
         answer: `
             <p>Yes, I would like to know more about the learning opportunities and training programs available for freshers.</p>
             <p>I would also like to understand how teams usually collaborate on projects and what skills the company expects employees to improve during the initial years.</p>
         `
     },
-    {
-        category: "HR Interview",
+    {        category: "HR Interview",
+        difficulty: "Medium",
         question: "Are you comfortable working night shifts?",
         answer: `
             <p>Yes, I am comfortable working night shifts if the role requires it.</p>
             <p>I understand that IT projects often involve global teams and different time zones. I am flexible with work schedules and focused on contributing effectively to the team and project goals.</p>
         `
     },
-    {
-        category: "HR Interview",
+    {        category: "HR Interview",
+        difficulty: "Medium",
         question: "Why should we hire you?",
         answer: `
             <p>You should hire me because I have a strong understanding of technical fundamentals along with good communication and problem-solving skills.</p>
             <p>I am eager to learn, adaptable to new environments, and committed to contributing positively to the organisation and team projects.</p>
         `
     },
-
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Easy",
         question: "Tell us about yourself.",
         answer: `
             <p>This is usually the opening question in many interviews. Keep your answer short, structured, and confident.</p>
@@ -1170,8 +1193,8 @@ const questions = [
             <p>I am a recent graduate in [mention your degree]. During my studies, I developed interest in [software development / data analysis / web development / embedded systems]. I have completed projects related to [mention your skills or tools]. I am eager to begin my career in an organisation where I can learn, contribute, and grow professionally.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Easy",
         question: "Why do you want to work for TCS?",
         answer: `
             <p>This question checks whether the candidate understands the company and has a clear reason for applying.</p>
@@ -1179,8 +1202,8 @@ const questions = [
             <p>I want to work for TCS because it is one of the leading IT service companies with a strong global presence, learning culture, and opportunities to work on real-world projects. I believe TCS can help me improve my technical and professional skills while allowing me to contribute to meaningful technology solutions.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
         question: "What are your strengths and weaknesses?",
         answer: `
             <p>This question checks self-awareness and honesty.</p>
@@ -1190,8 +1213,8 @@ const questions = [
             <p>Sometimes I spend extra time checking small details to avoid mistakes. I am improving this by setting time limits and prioritising important tasks first.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
         question: "Explain your final year project.",
         answer: `
             <p>This question checks technical understanding, project clarity, and communication skills.</p>
@@ -1209,8 +1232,8 @@ const questions = [
             <p>My final year project was [project name]. It was developed using [technologies]. The main objective was to [mention purpose]. I worked on [your role]. Through this project, I improved my understanding of problem-solving, debugging, teamwork, and practical implementation.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
         question: "What is your approach to problem solving?",
         answer: `
             <p>A good answer should show logical thinking.</p>
@@ -1218,8 +1241,8 @@ const questions = [
             <p>When I approach a problem, I first try to understand the requirement clearly. Then I break the problem into smaller parts. After that, I think of possible solutions, choose the most suitable one, implement it, and test it. If needed, I take feedback and improve the solution.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
         question: "How do you handle stress and pressure?",
         answer: `
             <p>This question checks maturity and workplace readiness.</p>
@@ -1227,8 +1250,8 @@ const questions = [
             <p>I handle stress by staying organised and prioritising tasks. I focus on one task at a time and try to complete urgent work first. I also maintain clear communication with my team so that problems can be solved quickly. I believe calm thinking helps in handling pressure effectively.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Easy",
         question: "What is recursion?",
         answer: `
             <p>Recursion is a programming technique where a function calls itself until a base condition is reached.</p>
@@ -1236,8 +1259,8 @@ const questions = [
             <p><b>Examples:</b> Factorial calculation, tree traversal, and some searching problems can be solved using recursion.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Easy",
         question: "What is the difference between HTTP and HTTPS?",
         answer: `
             <table>
@@ -1264,8 +1287,8 @@ const questions = [
             </table>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Easy",
         question: "What is an Operating System?",
         answer: `
             <p>An Operating System is system software that manages computer hardware and software resources.</p>
@@ -1280,8 +1303,8 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
         question: "What is time complexity?",
         answer: `
             <p>Time complexity describes how the running time of an algorithm increases as the input size increases.</p>
@@ -1295,16 +1318,16 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
         question: "What is a pointer?",
         answer: `
             <p>A pointer is a variable that stores the memory address of another variable.</p>
             <p>Pointers are mainly used in C and C++ for memory management, array handling, dynamic memory allocation, and data structures such as linked lists.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Easy",
         question: "What is SQL JOIN?",
         answer: `
             <p>SQL JOIN is used to combine rows from two or more tables based on a related column.</p>
@@ -1318,8 +1341,8 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
         question: "What is cloud computing?",
         answer: `
             <p>Cloud computing is the delivery of computing services such as servers, storage, databases, networking, and software over the internet.</p>
@@ -1327,8 +1350,8 @@ const questions = [
             <p><b>Examples:</b> AWS, Microsoft Azure, and Google Cloud Platform.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Easy",
         question: "Why do you want to join TCS?",
         answer: `
             <p>This HR question evaluates motivation and company fit.</p>
@@ -1336,8 +1359,8 @@ const questions = [
             <p>I want to join TCS because it provides a strong learning environment, exposure to global projects, and long-term career growth. I believe it is the right platform to build my skills and contribute to meaningful projects.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Easy",
         question: "Where do you see yourself in 5 years?",
         answer: `
             <p>This question checks career vision and commitment.</p>
@@ -1345,8 +1368,8 @@ const questions = [
             <p>In the next five years, I see myself as a skilled professional with strong technical knowledge and practical project experience. I want to contribute to important projects, take more responsibilities, and continue learning new technologies to grow with the organisation.</p>
         `
     },
-    {
-        category: "TCS NQT-style",
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
         question: "What are some tips for cracking a TCS NQT-style interview?",
         answer: `
             <p>Useful preparation tips include:</p>
@@ -1362,8 +1385,8 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "Interview Tips",
+    {        category: "Interview Tips",
+        difficulty: "Easy",
         question: "What does the Infosys interview process usually include?",
         answer: `
             <p>The Infosys interview process usually includes an aptitude round, technical interview, and HR discussion. In some roles, coding or system-based assessments may also be included.</p>
@@ -1391,8 +1414,8 @@ const questions = [
             </table>
         `
     },
-    {
-        category: "Interview Tips",
+    {        category: "Interview Tips",
+        difficulty: "Medium",
         question: "What do interviewers usually evaluate?",
         answer: `
             <p>Interviewers usually evaluate more than direct answers. They observe how clearly the candidate thinks and explains concepts.</p>
@@ -1408,8 +1431,8 @@ const questions = [
             </ul>
         `
     },
-    {
-        category: "Interview Tips",
+    {        category: "Interview Tips",
+        difficulty: "Hard",
         question: "What common mistakes do candidates make in interviews?",
         answer: `
             <p>Common mistakes include:</p>
@@ -1434,56 +1457,56 @@ const questions = [
             <p>It helps organise code by combining data and behaviour together. The main concepts are class, object, inheritance, polymorphism, abstraction, and encapsulation.</p>
         `
     },
-    {
-        category: "OOPs",
+    {        category: "OOPs",
+        difficulty: "Easy",
         question: "What is the difference between class and object?",
         answer: `
             <p>A class is a blueprint or template. An object is an instance created from that class.</p>
             <p>For example, <b>Car</b> can be a class, while <b>myCar</b> is an object with specific values such as colour, model, and speed.</p>
         `
     },
-    {
-        category: "OOPs",
+    {        category: "OOPs",
+        difficulty: "Easy",
         question: "What is encapsulation?",
         answer: `
             <p>Encapsulation means wrapping data and methods together inside a class.</p>
             <p>It also restricts direct access to data using access modifiers like private, public, and protected. This improves security and code maintainability.</p>
         `
     },
-    {
-        category: "OOPs",
+    {        category: "OOPs",
+        difficulty: "Medium",
         question: "What is inheritance?",
         answer: `
             <p>Inheritance allows one class to acquire the properties and methods of another class.</p>
             <p>It promotes code reuse. For example, a <b>Car</b> class can inherit common features from a <b>Vehicle</b> class.</p>
         `
     },
-    {
-        category: "OOPs",
+    {        category: "OOPs",
+        difficulty: "Medium",
         question: "What is polymorphism?",
         answer: `
             <p>Polymorphism means one name having many forms.</p>
             <p>In programming, it allows the same function or method name to behave differently depending on the object or arguments. Method overloading and method overriding are common examples.</p>
         `
     },
-    {
-        category: "OOPs",
+    {        category: "OOPs",
+        difficulty: "Hard",
         question: "What is abstraction?",
         answer: `
             <p>Abstraction means showing only essential details and hiding unnecessary internal implementation.</p>
             <p>For example, when we use an ATM, we only see options like withdraw and check balance. The internal banking process is hidden from the user.</p>
         `
     },
-    {
-        category: "Python",
+    {        category: "Python",
+        difficulty: "Easy",
         question: "Why is Python popular among beginners?",
         answer: `
             <p>Python is popular because its syntax is simple and close to English.</p>
             <p>It is widely used in web development, automation, data science, AI, machine learning, and scripting. It also has many useful libraries.</p>
         `
     },
-    {
-        category: "Python",
+    {        category: "Python",
+        difficulty: "Easy",
         question: "What is the difference between list and tuple in Python?",
         answer: `
             <table>
@@ -1494,56 +1517,56 @@ const questions = [
             </table>
         `
     },
-    {
-        category: "Python",
+    {        category: "Python",
+        difficulty: "Easy",
         question: "What is a dictionary in Python?",
         answer: `
             <p>A dictionary is a collection of key-value pairs.</p>
             <p>It is useful when data must be accessed using meaningful keys. Example: <b>{ name: "Anu", age: 21 }</b>.</p>
         `
     },
-    {
-        category: "Python",
+    {        category: "Python",
+        difficulty: "Easy",
         question: "What is the use of indentation in Python?",
         answer: `
             <p>Indentation is used to define blocks of code in Python.</p>
             <p>Unlike many languages that use braces, Python uses indentation to identify code inside loops, functions, classes, and conditional statements.</p>
         `
     },
-    {
-        category: "Python",
+    {        category: "Python",
+        difficulty: "Medium",
         question: "What is a Python function?",
         answer: `
             <p>A function is a reusable block of code that performs a specific task.</p>
             <p>Functions help reduce repetition and make programs easier to understand, test, and maintain.</p>
         `
     },
-    {
-        category: "Python",
+    {        category: "Python",
+        difficulty: "Medium",
         question: "What is exception handling in Python?",
         answer: `
             <p>Exception handling is used to handle runtime errors without stopping the entire program unexpectedly.</p>
             <p>Python uses <b>try</b>, <b>except</b>, <b>finally</b>, and <b>else</b> blocks for exception handling.</p>
         `
     },
-    {
-        category: "Java",
+    {        category: "Java",
+        difficulty: "Easy",
         question: "Why is Java platform independent?",
         answer: `
             <p>Java is platform independent because Java code is compiled into bytecode.</p>
             <p>This bytecode can run on any system that has the Java Virtual Machine, JVM. This is why Java follows the idea: write once, run anywhere.</p>
         `
     },
-    {
-        category: "Java",
+    {        category: "Java",
+        difficulty: "Easy",
         question: "What is JVM?",
         answer: `
             <p>JVM stands for Java Virtual Machine.</p>
             <p>It executes Java bytecode and provides runtime support such as memory management, security, and garbage collection.</p>
         `
     },
-    {
-        category: "Java",
+    {        category: "Java",
+        difficulty: "Medium",
         question: "What is the difference between JDK, JRE, and JVM?",
         answer: `
             <p><b>JVM:</b> Runs Java bytecode.</p>
@@ -1551,32 +1574,32 @@ const questions = [
             <p><b>JDK:</b> Provides tools to develop and run Java programs. It includes JRE and development tools.</p>
         `
     },
-    {
-        category: "Java",
+    {        category: "Java",
+        difficulty: "Medium",
         question: "What is method overloading in Java?",
         answer: `
             <p>Method overloading means having multiple methods with the same name but different parameters in the same class.</p>
             <p>It improves readability and supports compile-time polymorphism.</p>
         `
     },
-    {
-        category: "Java",
+    {        category: "Java",
+        difficulty: "Medium",
         question: "What is method overriding in Java?",
         answer: `
             <p>Method overriding occurs when a child class provides its own implementation of a method already defined in the parent class.</p>
             <p>It supports runtime polymorphism.</p>
         `
     },
-    {
-        category: "Operating System",
+    {        category: "Operating System",
+        difficulty: "Easy",
         question: "What is a process?",
         answer: `
             <p>A process is a program in execution.</p>
             <p>It has its own memory space, program counter, registers, and resources. Examples include a running browser, editor, or application.</p>
         `
     },
-    {
-        category: "Operating System",
+    {        category: "Operating System",
+        difficulty: "Medium",
         question: "What is the difference between process and thread?",
         answer: `
             <table>
@@ -1587,48 +1610,48 @@ const questions = [
             </table>
         `
     },
-    {
-        category: "Operating System",
+    {        category: "Operating System",
+        difficulty: "Hard",
         question: "What is deadlock?",
         answer: `
             <p>Deadlock is a situation where two or more processes wait for each other forever and none of them can continue execution.</p>
             <p>It usually occurs when resources are locked and each process is waiting for a resource held by another process.</p>
         `
     },
-    {
-        category: "Operating System",
+    {        category: "Operating System",
+        difficulty: "Medium",
         question: "What is virtual memory?",
         answer: `
             <p>Virtual memory is a memory management technique where the system uses part of secondary storage as if it were main memory.</p>
             <p>It allows large programs to run even when physical RAM is limited.</p>
         `
     },
-    {
-        category: "Operating System",
+    {        category: "Operating System",
+        difficulty: "Medium",
         question: "What is context switching?",
         answer: `
             <p>Context switching is the process of saving the state of one process and loading the state of another process.</p>
             <p>It allows multitasking, but too many context switches can reduce performance.</p>
         `
     },
-    {
-        category: "Aptitude & Reasoning",
+    {        category: "Aptitude & Reasoning",
+        difficulty: "Easy",
         question: "How should you approach aptitude questions in an interview preparation test?",
         answer: `
             <p>First identify the type of question: percentage, ratio, time and work, probability, logical reasoning, or series.</p>
             <p>Then write down the given data, choose the shortest formula or logic, solve step by step, and check whether the answer is reasonable.</p>
         `
     },
-    {
-        category: "Aptitude & Reasoning",
+    {        category: "Aptitude & Reasoning",
+        difficulty: "Easy",
         question: "What is a percentage?",
         answer: `
             <p>A percentage represents a value out of 100.</p>
             <p>For example, 25% means 25 out of 100. Percentages are commonly used in profit and loss, marks, discounts, and data interpretation.</p>
         `
     },
-    {
-        category: "Aptitude & Reasoning",
+    {        category: "Aptitude & Reasoning",
+        difficulty: "Easy",
         question: "What is the basic formula for simple interest?",
         answer: `
             <p>The formula for simple interest is:</p>
@@ -1636,16 +1659,16 @@ const questions = [
             <p>Here, P is principal amount, R is rate of interest, and T is time.</p>
         `
     },
-    {
-        category: "Aptitude & Reasoning",
+    {        category: "Aptitude & Reasoning",
+        difficulty: "Medium",
         question: "How do you solve number series questions?",
         answer: `
             <p>Look for patterns such as addition, subtraction, multiplication, division, squares, cubes, alternate terms, or prime numbers.</p>
             <p>Do not guess immediately. Compare differences between consecutive terms first.</p>
         `
     },
-    {
-        category: "Infosys-style",
+    {        category: "Infosys-style",
+        difficulty: "Easy",
         question: "How should you answer technical questions when you only know part of the answer?",
         answer: `
             <p>Answer honestly and explain what you know clearly.</p>
@@ -1653,68 +1676,558 @@ const questions = [
             <p>This sounds more professional than guessing confidently.</p>
         `
     },
-    {
-        category: "Infosys-style",
+    {        category: "Infosys-style",
+        difficulty: "Medium",
         question: "Why is communication important in service-based company interviews?",
         answer: `
             <p>Service-based companies work with clients, teams, and business requirements.</p>
             <p>So interviewers check whether the candidate can explain ideas clearly, listen carefully, and communicate professionally.</p>
         `
     },
-    {
-        category: "Infosys-style",
+    {        category: "Infosys-style",
+        difficulty: "Medium",
         question: "How do you explain a project effectively in an Infosys-style interview?",
         answer: `
             <p>Use this structure: problem, objective, technology used, your role, features, challenges, result, and learning.</p>
             <p>Keep it simple and avoid exaggerating. Be ready for follow-up questions from your own project.</p>
         `
     },
-    {
-        category: "Wipro-style",
+    {        category: "Wipro-style",
+        difficulty: "Easy",
         question: "Are you willing to relocate?",
         answer: `
             <p>A good answer should show flexibility while remaining genuine.</p>
             <p><b>Sample Answer:</b> Yes, I am open to relocation if the role requires it. I see it as an opportunity to learn, adapt to a new environment, and contribute to the organisation effectively.</p>
         `
     },
-    {
-        category: "Wipro-style",
+    {        category: "Wipro-style",
+        difficulty: "Easy",
         question: "What motivates you to work in the IT industry?",
         answer: `
             <p>I am motivated by the opportunity to solve real-world problems using technology.</p>
             <p>The IT industry also provides continuous learning, teamwork, innovation, and exposure to different domains.</p>
         `
     },
-    {
-        category: "Wipro-style",
+    {        category: "Wipro-style",
+        difficulty: "Medium",
         question: "How do you handle feedback?",
         answer: `
             <p>I take feedback positively because it helps me improve.</p>
             <p>I first listen carefully, understand the area of improvement, and then work on it with a clear plan.</p>
         `
     },
-    {
-        category: "Cognizant-style",
+    {        category: "Cognizant-style",
+        difficulty: "Easy",
         question: "What is the difference between confidence and overconfidence in an interview?",
         answer: `
             <p>Confidence means explaining what you know clearly and calmly.</p>
             <p>Overconfidence means pretending to know everything or ignoring corrections. Interviewers usually prefer honest confidence.</p>
         `
     },
-    {
-        category: "Cognizant-style",
+    {        category: "Cognizant-style",
+        difficulty: "Medium",
         question: "How do you work in a team when there is disagreement?",
         answer: `
             <p>I would listen to the other person’s point of view first and then explain my idea clearly.</p>
             <p>If needed, I would compare options based on facts, project goals, and team benefit instead of personal opinion.</p>
         `
     },
-    {
-        category: "Cognizant-style",
+    {        category: "Cognizant-style",
         question: "What does professionalism mean to you?",
         answer: `
             <p>Professionalism means being responsible, respectful, punctual, honest, and committed to quality work.</p>
             <p>It also means communicating clearly and handling challenges calmly.</p>
+        `
+    }
+,
+
+    {
+        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is Artificial Intelligence?",
+        answer: `
+            <p>Artificial Intelligence is the field of making machines perform tasks that normally require human intelligence.</p>
+            <p>Examples include speech recognition, image recognition, recommendation systems, chatbots, and decision-making systems.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is Machine Learning?",
+        answer: `
+            <p>Machine Learning is a branch of AI where systems learn patterns from data instead of being explicitly programmed for every rule.</p>
+            <p>For example, an email spam detector learns from previous emails and predicts whether a new email is spam or not.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is the difference between AI, ML, and Deep Learning?",
+        answer: `
+            <p><b>AI</b> is the broad idea of making machines intelligent.</p>
+            <p><b>Machine Learning</b> is a subset of AI where machines learn from data.</p>
+            <p><b>Deep Learning</b> is a subset of ML that uses neural networks with multiple layers.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is supervised learning?",
+        answer: `
+            <p>Supervised learning is a machine learning approach where the model is trained using labelled data.</p>
+            <p>The input and correct output are both given during training. Examples include house price prediction and disease classification.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is unsupervised learning?",
+        answer: `
+            <p>Unsupervised learning uses data without labelled outputs.</p>
+            <p>The model tries to find hidden patterns or groups in the data. A common example is customer segmentation using clustering.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is reinforcement learning?",
+        answer: `
+            <p>Reinforcement learning is a learning method where an agent learns by interacting with an environment.</p>
+            <p>The agent receives rewards or penalties based on actions and tries to learn the best strategy over time.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is a dataset in machine learning?",
+        answer: `
+            <p>A dataset is a collection of data used to train, validate, and test a machine learning model.</p>
+            <p>It usually contains features, which are input variables, and sometimes labels, which are expected outputs.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What are features and labels?",
+        answer: `
+            <p><b>Features</b> are the input variables used by the model to make predictions.</p>
+            <p><b>Labels</b> are the correct outputs used during supervised learning.</p>
+            <p>Example: In house price prediction, area and number of rooms are features, and price is the label.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is training data and testing data?",
+        answer: `
+            <p><b>Training data</b> is used to teach the model.</p>
+            <p><b>Testing data</b> is used to check how well the model performs on unseen data.</p>
+            <p>This separation helps us understand whether the model can generalise beyond the examples it studied.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is overfitting in machine learning?",
+        answer: `
+            <p>Overfitting happens when a model learns the training data too closely, including noise and unnecessary details.</p>
+            <p>It performs very well on training data but poorly on new data.</p>
+            <p>Common solutions include using more data, regularisation, cross-validation, dropout, and simpler models.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is underfitting?",
+        answer: `
+            <p>Underfitting happens when a model is too simple to learn the actual pattern in the data.</p>
+            <p>It performs poorly on both training data and testing data.</p>
+            <p>Solutions include using a better model, adding useful features, or training for longer.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is bias and variance?",
+        answer: `
+            <p><b>Bias</b> is error caused by overly simple assumptions in the model.</p>
+            <p><b>Variance</b> is error caused by the model being too sensitive to training data.</p>
+            <p>A good model balances bias and variance to generalise well.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is classification?",
+        answer: `
+            <p>Classification is a supervised learning task where the model predicts a category or class.</p>
+            <p>Examples include spam vs non-spam email, disease vs healthy, and pass vs fail prediction.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is regression?",
+        answer: `
+            <p>Regression is a supervised learning task where the model predicts a continuous numerical value.</p>
+            <p>Examples include predicting house price, temperature, salary, or battery life.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is a confusion matrix?",
+        answer: `
+            <p>A confusion matrix is a table used to evaluate classification models.</p>
+            <p>It shows true positives, true negatives, false positives, and false negatives.</p>
+            <p>From it, we can calculate accuracy, precision, recall, and F1-score.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is precision?",
+        answer: `
+            <p>Precision tells us, out of all predicted positive cases, how many were actually positive.</p>
+            <p>It is important when false positives are costly. For example, wrongly marking a normal transaction as fraud can inconvenience users.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is recall?",
+        answer: `
+            <p>Recall tells us, out of all actual positive cases, how many the model correctly identified.</p>
+            <p>It is important when missing a positive case is dangerous, such as disease detection or fraud detection.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is F1-score?",
+        answer: `
+            <p>F1-score is the harmonic mean of precision and recall.</p>
+            <p>It is useful when we need a balance between precision and recall, especially for imbalanced datasets.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is accuracy and when can it be misleading?",
+        answer: `
+            <p>Accuracy is the percentage of correct predictions.</p>
+            <p>It can be misleading when the dataset is imbalanced. For example, if 95% of samples belong to one class, a model can get high accuracy by always predicting that class, while still being poor.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is cross-validation?",
+        answer: `
+            <p>Cross-validation is a method used to evaluate a model by splitting the dataset into multiple parts.</p>
+            <p>The model is trained and tested several times on different splits. This gives a more reliable performance estimate.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is a neural network?",
+        answer: `
+            <p>A neural network is a machine learning model inspired by the human brain.</p>
+            <p>It has layers of connected nodes, called neurons, that learn patterns from data.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is an activation function?",
+        answer: `
+            <p>An activation function decides whether a neuron should be activated and helps the network learn non-linear patterns.</p>
+            <p>Common activation functions include ReLU, sigmoid, and tanh.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is gradient descent?",
+        answer: `
+            <p>Gradient descent is an optimisation algorithm used to minimise the loss function.</p>
+            <p>It adjusts model parameters step by step in the direction that reduces error.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is a loss function?",
+        answer: `
+            <p>A loss function measures how far the model prediction is from the correct answer.</p>
+            <p>During training, the model tries to reduce this loss.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is regularisation?",
+        answer: `
+            <p>Regularisation is a technique used to reduce overfitting.</p>
+            <p>It adds a penalty to complex models so that the model learns simpler and more general patterns.</p>
+            <p>Common examples are L1 and L2 regularisation.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is feature scaling?",
+        answer: `
+            <p>Feature scaling brings input features into a similar range.</p>
+            <p>It is useful for algorithms that depend on distance or gradient-based optimisation, such as KNN, SVM, and neural networks.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is the difference between normalization and standardization?",
+        answer: `
+            <p><b>Normalization</b> usually scales values to a fixed range, commonly 0 to 1.</p>
+            <p><b>Standardization</b> transforms values so they have mean 0 and standard deviation 1.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is clustering?",
+        answer: `
+            <p>Clustering is an unsupervised learning technique that groups similar data points together.</p>
+            <p>Examples include customer grouping, document grouping, and image segmentation.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is K-Means clustering?",
+        answer: `
+            <p>K-Means is a clustering algorithm that divides data into K groups.</p>
+            <p>It assigns each data point to the nearest cluster centre and updates the centres until the groups become stable.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is a decision tree?",
+        answer: `
+            <p>A decision tree is a model that makes decisions using a tree-like structure of conditions.</p>
+            <p>It is easy to understand and can be used for classification and regression.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is Random Forest?",
+        answer: `
+            <p>Random Forest is an ensemble learning method that combines many decision trees.</p>
+            <p>It improves accuracy and reduces overfitting compared to a single decision tree.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is the difference between bagging and boosting?",
+        answer: `
+            <p><b>Bagging</b> trains multiple models independently and combines their results. Random Forest is an example.</p>
+            <p><b>Boosting</b> trains models sequentially, where each new model focuses on correcting previous mistakes. XGBoost and AdaBoost are examples.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is NLP?",
+        answer: `
+            <p>NLP stands for Natural Language Processing.</p>
+            <p>It helps computers understand and process human language. Examples include chatbots, translation, sentiment analysis, and text summarisation.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Easy",
+        question: "What is Computer Vision?",
+        answer: `
+            <p>Computer Vision is a field of AI that helps computers understand images and videos.</p>
+            <p>Examples include face detection, medical image analysis, object detection, and self-driving car vision systems.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is CNN used for?",
+        answer: `
+            <p>CNN stands for Convolutional Neural Network.</p>
+            <p>It is mainly used for image-related tasks such as image classification, object detection, and medical image processing.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is RNN used for?",
+        answer: `
+            <p>RNN stands for Recurrent Neural Network.</p>
+            <p>It is used for sequential data such as text, speech, sensor data, and time-series prediction.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is transfer learning?",
+        answer: `
+            <p>Transfer learning uses a model trained on one large task and adapts it to a new related task.</p>
+            <p>It saves training time and works well when we have limited data.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "What is data leakage?",
+        answer: `
+            <p>Data leakage happens when information from the testing data or future data is accidentally used during training.</p>
+            <p>It gives unrealistically high performance during testing but fails in real-world use.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Hard",
+        question: "What is the vanishing gradient problem?",
+        answer: `
+            <p>The vanishing gradient problem occurs when gradients become very small during backpropagation.</p>
+            <p>This makes early layers of a deep neural network learn very slowly.</p>
+            <p>Solutions include ReLU activation, better weight initialization, batch normalization, residual connections, and architectures like LSTM for sequence tasks.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Hard",
+        question: "What is attention in deep learning?",
+        answer: `
+            <p>Attention is a mechanism that helps a model focus on the most relevant parts of the input while making a prediction.</p>
+            <p>It is widely used in transformer models for NLP, computer vision, and generative AI tasks.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Hard",
+        question: "What is a transformer model?",
+        answer: `
+            <p>A transformer is a deep learning architecture based on attention mechanisms.</p>
+            <p>It processes data in parallel and captures long-range relationships effectively.</p>
+            <p>Transformers are used in large language models, translation, summarisation, code generation, and many modern AI systems.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Hard",
+        question: "What is model interpretability?",
+        answer: `
+            <p>Model interpretability means understanding why a model made a particular prediction.</p>
+            <p>It is important in high-stakes areas such as healthcare, finance, and recruitment, where decisions must be explainable and trustworthy.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Hard",
+        question: "What is MLOps?",
+        answer: `
+            <p>MLOps means Machine Learning Operations.</p>
+            <p>It focuses on deploying, monitoring, maintaining, and updating ML models in production systems.</p>
+            <p>It combines machine learning, DevOps, automation, testing, and monitoring.</p>
+        `
+    },
+    {        category: "AI/ML",
+        difficulty: "Medium",
+        question: "How would you explain an AI/ML project in an interview?",
+        answer: `
+            <p>Use a clear structure:</p>
+            <ul>
+                <li>Problem statement</li>
+                <li>Dataset used</li>
+                <li>Preprocessing steps</li>
+                <li>Model selected and why</li>
+                <li>Evaluation metrics</li>
+                <li>Results and limitations</li>
+                <li>Possible improvements</li>
+            </ul>
+            <p>Interviewers prefer practical clarity over memorised technical terms.</p>
+        `
+    },
+    {        category: "Infosys-style",
+        difficulty: "Medium",
+        question: "Explain a machine learning project you have done.",
+        answer: `
+            <p>Start with the problem and dataset, then explain preprocessing, model selection, evaluation, and result.</p>
+            <p><b>Sample structure:</b> I worked on [problem]. The dataset contained [features]. I cleaned the data, handled missing values, trained [model], and evaluated it using [metrics]. The project helped me understand practical ML workflow and model evaluation.</p>
+        `
+    },
+    {        category: "TCS NQT-style",
+        difficulty: "Medium",
+        question: "What is the difference between AI and automation?",
+        answer: `
+            <p>Automation follows predefined rules to perform repeated tasks.</p>
+            <p>AI can learn from data, recognise patterns, and make decisions in situations where fixed rules may not be enough.</p>
+        `
+    },
+    {        category: "Wipro-style",
+        difficulty: "Easy",
+        question: "Why is data preprocessing important in AI/ML?",
+        answer: `
+            <p>Data preprocessing improves the quality of input data before training a model.</p>
+            <p>It includes handling missing values, removing duplicates, encoding categorical variables, scaling features, and cleaning noisy data.</p>
+        `
+    },
+    {        category: "Cognizant-style",
+        difficulty: "Medium",
+        question: "How can AI be used in real business applications?",
+        answer: `
+            <p>AI can be used for customer support chatbots, fraud detection, recommendation systems, predictive maintenance, demand forecasting, medical diagnosis support, and document automation.</p>
+            <p>In interviews, connect AI applications to efficiency, accuracy, and better decision-making.</p>
+        `
+    },
+    {        category: "Data Structures",
+        difficulty: "Medium",
+        question: "What is the difference between stack and queue?",
+        answer: `
+            <p>A stack follows LIFO, Last In First Out. The last element inserted is removed first.</p><p>A queue follows FIFO, First In First Out. The first element inserted is removed first.</p><p>Stacks are used in function calls and undo operations. Queues are used in scheduling and task processing.</p>
+        `
+    },
+    {        category: "Data Structures",
+        difficulty: "Hard",
+        question: "What is the difference between BFS and DFS?",
+        answer: `
+            <p>BFS, Breadth First Search, explores nodes level by level and usually uses a queue.</p><p>DFS, Depth First Search, explores as deep as possible before backtracking and usually uses recursion or a stack.</p><p>BFS is useful for shortest path in unweighted graphs. DFS is useful for traversal, cycle detection, and backtracking problems.</p>
+        `
+    },
+    {        category: "Python",
+        difficulty: "Hard",
+        question: "Hard practice question for Python: What should a candidate focus on?",
+        answer: `
+            <p>For hard level Python preparation, focus on clear concepts, simple examples, and structured explanation.</p><p>Try to connect the answer with practical interview situations instead of memorising definitions.</p>
+        `
+    },
+    {        category: "Java",
+        difficulty: "Hard",
+        question: "Hard practice question for Java: What should a candidate focus on?",
+        answer: `
+            <p>For hard level Java preparation, focus on clear concepts, simple examples, and structured explanation.</p><p>Try to connect the answer with practical interview situations instead of memorising definitions.</p>
+        `
+    },
+    {        category: "Aptitude & Reasoning",
+        difficulty: "Hard",
+        question: "Hard practice question for Aptitude & Reasoning: What should a candidate focus on?",
+        answer: `
+            <p>For hard level Aptitude & Reasoning preparation, focus on clear concepts, simple examples, and structured explanation.</p><p>Try to connect the answer with practical interview situations instead of memorising definitions.</p>
+        `
+    },
+    {        category: "Networks & Testing",
+        difficulty: "Hard",
+        question: "Hard practice question for Networks & Testing: What should a candidate focus on?",
+        answer: `
+            <p>For hard level Networks & Testing preparation, focus on clear concepts, simple examples, and structured explanation.</p><p>Try to connect the answer with practical interview situations instead of memorising definitions.</p>
+        `
+    },
+    {        category: "System Design",
+        difficulty: "Easy",
+        question: "What is scalability in system design?",
+        answer: `
+            <p>Scalability is the ability of a system to handle increased users, requests, or data without major performance loss.</p><p>It can be achieved using load balancing, caching, database optimisation, and horizontal scaling.</p>
+        `
+    },
+    {        category: "HR Interview",
+        difficulty: "Hard",
+        question: "Hard practice question for HR Interview: What should a candidate focus on?",
+        answer: `
+            <p>For hard level HR Interview preparation, focus on clear concepts, simple examples, and structured explanation.</p><p>Try to connect the answer with practical interview situations instead of memorising definitions.</p>
+        `
+    },
+    {        category: "TCS NQT-style",
+        difficulty: "Hard",
+        question: "Hard practice question for TCS NQT-style: What should a candidate focus on?",
+        answer: `
+            <p>For hard level TCS NQT-style preparation, focus on clear concepts, simple examples, and structured explanation.</p><p>Try to connect the answer with practical interview situations instead of memorising definitions.</p>
+        `
+    },
+    {        category: "Infosys-style",
+        difficulty: "Hard",
+        question: "How would you handle a situation where your project has a tight deadline and unclear requirements?",
+        answer: `
+            <p>I would first clarify the most important requirements with the team or mentor.</p><p>Then I would break the work into smaller tasks, prioritise critical features, communicate risks early, and give regular updates.</p><p>This shows planning, ownership, and communication under pressure.</p>
+        `
+    },
+    {        category: "Wipro-style",
+        difficulty: "Hard",
+        question: "How would you manage conflict in a project team?",
+        answer: `
+            <p>I would listen to both sides calmly and focus on the project goal rather than personal opinions.</p><p>If needed, I would compare options based on facts, deadlines, quality, and team benefit.</p><p>The aim is to solve the issue professionally without affecting teamwork.</p>
+        `
+    },
+    {        category: "Cognizant-style",
+        difficulty: "Hard",
+        question: "How would you explain a technical problem to a non-technical client?",
+        answer: `
+            <p>I would avoid unnecessary jargon and explain the issue using simple language and examples.</p><p>I would focus on impact, solution options, timeline, and what action is needed from the client.</p><p>This helps build trust and avoids confusion.</p>
         `
     }
 
@@ -1725,9 +2238,27 @@ let currentIndex = 0;
 let viewedCards = 0;
 let writtenAnswers = {};
 
+function getDifficulty(q) {
+    if (q.difficulty) return q.difficulty;
+
+    const mediumCategories = ["System Design", "DBMS & SQL", "Operating System", "Java", "Python", "OOPs"];
+    const hardWords = ["microservices", "scalable", "trade-offs", "consistency", "distributed"];
+
+    if (hardWords.some(word => q.question.toLowerCase().includes(word))) {
+        return "Hard";
+    }
+
+    if (mediumCategories.includes(q.category)) {
+        return "Medium";
+    }
+
+    return "Easy";
+}
+
 function loadQuestion() {
     if (filteredQuestions.length === 0) {
         document.getElementById("categoryBadge").innerText = "No Category";
+        document.getElementById("difficultyBadge").innerText = "No Difficulty";
         document.getElementById("questionCount").innerText = "No questions found";
         document.getElementById("questionTitle").innerText = "No matching question found.";
         document.getElementById("answerText").innerHTML = "";
@@ -1738,6 +2269,7 @@ function loadQuestion() {
     const q = filteredQuestions[currentIndex];
 
     document.getElementById("categoryBadge").innerText = q.category;
+    document.getElementById("difficultyBadge").innerText = getDifficulty(q);
     document.getElementById("questionCount").innerText =
         `Question ${currentIndex + 1} of ${filteredQuestions.length}`;
 
@@ -1819,18 +2351,23 @@ function randomQuestion() {
 
 function filterQuestions() {
     const selectedCategory = document.getElementById("categoryFilter").value;
+    const selectedDifficulty = document.getElementById("difficultyFilter").value;
     const searchText = document.getElementById("searchInput").value.toLowerCase();
 
     filteredQuestions = questions.filter(q => {
         const categoryMatch =
             selectedCategory === "All" || q.category === selectedCategory;
 
+        const difficultyMatch =
+            selectedDifficulty === "All" || getDifficulty(q) === selectedDifficulty;
+
         const searchMatch =
             q.question.toLowerCase().includes(searchText) ||
             q.category.toLowerCase().includes(searchText) ||
+            getDifficulty(q).toLowerCase().includes(searchText) ||
             q.answer.toLowerCase().includes(searchText);
 
-        return categoryMatch && searchMatch;
+        return categoryMatch && difficultyMatch && searchMatch;
     });
 
     currentIndex = 0;
@@ -1846,7 +2383,7 @@ function renderQuestionGrid() {
         card.className = "question-mini-card";
 
         card.innerHTML = `
-            <span>${q.category}</span>
+            <span>${q.category} · ${getDifficulty(q)}</span>
             <h4>${q.question}</h4>
         `;
 
