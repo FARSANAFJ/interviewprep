@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Free Interview Flashcards | NextInterview</title>
+<meta id="pageDescription" name="description" content="Practice technical, coding, HR, aptitude, and company-style interview questions for free on NextInterview.">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -687,8 +688,8 @@ button:hover,
 
 <section class="practice-hero">
     <div>
-        <h1>Free Interview Flashcards</h1>
-        <p>
+        <h1 id="heroTitle">Free Interview Flashcards</h1>
+        <p id="heroDescription">
             Practice important placement interview questions in a simple flashcard style.
             Write your own answer first, then reveal the suggested answer and compare.
         </p>
@@ -2400,7 +2401,41 @@ function renderQuestionGrid() {
     });
 }
 
+// OPTIONAL COMPANY-SPECIFIC VIEW FROM THE URL, e.g. practice.html?company=infosys
+function applyCompanyFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const company = (params.get("company") || "").toLowerCase().trim();
+
+    const companyMap = {
+        infosys: { name: "Infosys", category: "Infosys-style" },
+        tcs: { name: "TCS", category: "TCS NQT-style" },
+        wipro: { name: "Wipro", category: "Wipro-style" },
+        cognizant: { name: "Cognizant", category: "Cognizant-style" }
+    };
+
+    const data = companyMap[company];
+    if (!data) return;
+
+    document.title = `${data.name} Interview Questions 2026 | Free Practice | NextInterview`;
+
+    const description = `Practice ${data.name} technical, coding, aptitude and HR interview questions for free on NextInterview.`;
+    const metaDescription = document.getElementById("pageDescription");
+    if (metaDescription) metaDescription.setAttribute("content", description);
+
+    const heroTitle = document.getElementById("heroTitle");
+    const heroDescription = document.getElementById("heroDescription");
+    if (heroTitle) heroTitle.textContent = `${data.name} Interview Questions & Free Practice`;
+    if (heroDescription) heroDescription.textContent = description;
+
+    const categoryFilter = document.getElementById("categoryFilter");
+    if (categoryFilter && [...categoryFilter.options].some(option => option.value === data.category)) {
+        categoryFilter.value = data.category;
+        filterQuestions();
+    }
+}
+
 loadQuestion();
+applyCompanyFromURL();
 </script>
 
 </body>
